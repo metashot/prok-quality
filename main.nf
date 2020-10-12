@@ -2,7 +2,7 @@
 
 Channel
     .fromPath( params.genomes )
-    .filter { it.extension == params.genomes_ext }
+    //.filter { it.extension == params.genomes_ext }
     .map { file -> tuple(file.baseName, file) }
     .into { genomes_checkm_tmp_ch; genomes_barrnap_ch; genomes_trnascan_se_ch } 
 
@@ -27,14 +27,19 @@ process checkm {
     script:
     reduced_tree = params.reduced_tree ? "--reduced_tree" : ""
     """   
+    mkdir -p genomes_dir
     mkdir -p tmp
+    for genome in $genomes
+    do
+        mv \$genome genomes_dir/\${genome}.fa
+    done
    
     checkm lineage_wf \
         --tmpdir tmp \
         -t ${task.cpus} \
-        -x ${params.genomes_ext} \
+        -x fa \
         ${reduced_tree} \
-        . \
+        genomes_dir \
         checkm
     
     checkm qa \
@@ -138,13 +143,12 @@ process genome_info {
     reduced_tree = params.reduced_tree ? "--reduced_tree" : ""
     """
     mkdir rtrna
-    mv $rrna_gffs $trna_outs rtrna
+    mv $rrna_gffs $trna_outs rtrna_dir
     genome_info.py \
         checkm_qa.txt \
-        rtrna \
+        rtrna_dir \
         genome_info.tsv \
-        genome_info_drep.csv \
-        ${params.genomes_ext}
+        genome_info_drep.csv
     """
 }
 
@@ -170,7 +174,6 @@ process genome_filter {
     genome_filter.py \
         genomes \
         filtered_all \
-        ${params.genomes_ext} \
         genome_info.tsv \
         ${params.min_completeness} \
         ${params.max_contamination}
@@ -202,8 +205,8 @@ if (!params.skip_dereplication) {
     
         script:   
         """
-        mkdir genomes
-        mv $genomes genomes
+        mkdir genomes_dir
+        mv $genomes genomes_dir
         dRep dereplicate \
             drep \
             --genomeInfo genome_info_drep.csv \
@@ -213,7 +216,7 @@ if (!params.skip_dereplication) {
             -comp ${params.min_completeness} \
             -con ${params.max_contamination} \
             -strW 0 \
-            -g genomes/*
+            -g genomes_dir/*
     
         mv drep/dereplicated_genomes filtered_derep 
         """
@@ -237,6 +240,6 @@ process derep_info {
     
     script:   
     """
-    derep_info.py Cdb.csv Wdb.csv derep_info.tsv ${params.genomes_ext}
+    derep_info.py Cdb.csv Wdb.csv derep_info.tsv
     """
 }

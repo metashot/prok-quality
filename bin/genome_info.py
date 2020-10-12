@@ -11,7 +11,6 @@ CHECKM_QA = sys.argv[1]
 RTRNA_DIR = sys.argv[2]
 GENOME_INFO = sys.argv[3]
 GENOME_INFO_DREP = sys.argv[4]
-GENOME_EXT = sys.argv[5]
 
 
 usecols_checkm = [
@@ -125,8 +124,5 @@ genome_info_drep_df.rename(columns={
     "Contamination": "contamination",
     "Strain heterogeneity": "strain_heterogeneity"
     }, inplace=True)
-
-genome_info_drep_df["genome"] = genome_info_drep_df["genome"] + \
-     ".{}".format(GENOME_EXT)
 
 genome_info_drep_df.to_csv(GENOME_INFO_DREP, sep=',', index=False)

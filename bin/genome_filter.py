@@ -9,14 +9,12 @@ import pandas as pd
 
 INPUT_GENOMES_DIR = sys.argv[1]
 FILTERED_GENOMES_DIR = sys.argv[2]
-GENOME_EXT = sys.argv[3]
-GENOME_INFO = sys.argv[4]
-MIN_COMPLETENESS = float(sys.argv[5])
-MAX_CONTAMINATION = float(sys.argv[6])
+GENOME_INFO = sys.argv[3]
+MIN_COMPLETENESS = float(sys.argv[4])
+MAX_CONTAMINATION = float(sys.argv[5])
 
 def filter(row):
-    genome_fn = os.path.join(INPUT_GENOMES_DIR, \
-        "{}.{}".format(row["ID"], GENOME_EXT))
+    genome_fn = os.path.join(INPUT_GENOMES_DIR, row["ID"])
     if (row["Completeness"] >= MIN_COMPLETENESS) & \
         (row["Contamination"] <= MAX_CONTAMINATION):
         shutil.copy(genome_fn, FILTERED_GENOMES_DIR)

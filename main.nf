@@ -172,7 +172,7 @@ process genome_filter {
     mkdir genomes_dir
     mv $genomes genomes_dir
     genome_filter.py \
-        genomes \
+        genomes_dir \
         filtered_all \
         genome_info.tsv \
         ${params.min_completeness} \

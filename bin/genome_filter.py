@@ -14,7 +14,7 @@ MIN_COMPLETENESS = float(sys.argv[4])
 MAX_CONTAMINATION = float(sys.argv[5])
 
 def filter(row):
-    genome_fn = os.path.join(INPUT_GENOMES_DIR, row["ID"])
+    genome_fn = os.path.join(INPUT_GENOMES_DIR, row["Genome"])
     if (row["Completeness"] >= MIN_COMPLETENESS) & \
         (row["Contamination"] <= MAX_CONTAMINATION):
         shutil.copy(genome_fn, FILTERED_GENOMES_DIR)

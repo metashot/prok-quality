@@ -23,6 +23,6 @@ derep_info_df["Representative"] = \
 
 derep_info_df = derep_info_df[["secondary_cluster", "Representative"]]. \
     reset_index(). \
-    rename(columns={"genome": "ID", "secondary_cluster": "Cluster"})
+    rename(columns={"genome": "Genome", "secondary_cluster": "Cluster"})
 
 derep_info_df.to_csv(DEREP_INFO, sep='\t', index=False)

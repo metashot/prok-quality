@@ -142,7 +142,7 @@ process genome_info {
     script:
     reduced_tree = params.reduced_tree ? "--reduced_tree" : ""
     """
-    mkdir rtrna
+    mkdir rtrna_dir
     mv $rrna_gffs $trna_outs rtrna_dir
     genome_info.py \
         checkm_qa.txt \
@@ -169,8 +169,8 @@ process genome_filter {
     
     script:   
     """
-    mkdir genomes
-    mv $genomes genomes
+    mkdir genomes_dir
+    mv $genomes genomes_dir
     genome_filter.py \
         genomes \
         filtered_all \

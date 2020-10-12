@@ -47,7 +47,7 @@ def get_rrna(row):
         data=["No", "No", "No"]
     )
 
-    genome_id = row["ID"]
+    genome_id = os.path.splitext(row["Genome"])[0]
     for k in ["bac", "arc"]:
 
         gff_fn = os.path.join(RTRNA_DIR, "{}.rRNA.{}.gff".format(genome_id, k))
@@ -75,7 +75,7 @@ def get_trna(row):
         data=[0, 0]
     )
 
-    genome_id = row["ID"]
+    genome_id = os.path.splitext(row["Genome"])[0]
     for k in ["bac", "arc"]:
         out_fn = os.path.join(RTRNA_DIR, "{}.tRNA.{}.out".format(genome_id, k))
 
@@ -101,7 +101,7 @@ checkm_qa_df = pd.read_table(CHECKM_QA, sep='\t', header=0, engine='python',
     usecols=usecols_checkm)
 
 # genome info
-genome_info_df = checkm_qa_df.rename(columns={"Bin Id": "ID"})
+genome_info_df = checkm_qa_df.rename(columns={"Bin Id": "Genome"})
 
 genome_info_df[["5S rRNA", "23S rRNA", "16S rRNA"]] = \
     genome_info_df.apply(get_rrna, axis=1)
@@ -113,13 +113,13 @@ genome_info_df.to_csv(GENOME_INFO, sep='\t', index=False)
 
 # genome info for dRep
 genome_info_drep_df = genome_info_df[[
-    "ID",
+    "Genome",
     "Completeness",
     "Contamination",
     "Strain heterogeneity"]]
 
 genome_info_drep_df.rename(columns={
-    "ID": "genome",
+    "Genome": "genome",
     "Completeness":"completeness",
     "Contamination": "contamination",
     "Strain heterogeneity": "strain_heterogeneity"

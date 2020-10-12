@@ -2,7 +2,6 @@
 
 Channel
     .fromPath( params.genomes )
-    //.filter { it.extension == params.genomes_ext }
     .map { file -> tuple(file.baseName, file) }
     .into { genomes_checkm_tmp_ch; genomes_barrnap_ch; genomes_trnascan_se_ch } 
 

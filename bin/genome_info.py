@@ -111,7 +111,7 @@ genome_info_df[["# tRNA", "# tRNA types"]] = \
 
 genome_info_df.to_csv(GENOME_INFO, sep='\t', index=False)
 
-# genome info table for dRep
+# genome info for dRep
 genome_info_drep_df = genome_info_df[[
     "ID",
     "Completeness",

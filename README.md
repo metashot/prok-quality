@@ -66,16 +66,16 @@ Several directories will be created in the `results` folder:
 ## MIMAG/MISAG standards
 Following MIMAG/MISAG standards, you can classify a prokaryotic
 genome as **high-quality draft** when:
-- completeness: >90%;
-- contamination: <5%;
-- presence of 23S, 16S, and 5S rRNA genes;
-- presence of at least 18 tRNA types.
+- its completeness is >90%;
+- its contamination is <5%;
+- 23S, 16S, and 5S rRNA genes can be predicted;
+- at least 18 tRNA types can be predicted.
 
 A genome can be classified as **medium-quality draft** when:
-- completeness: >=50%;
-- contamination: <10%.
+- its completeness is >=50%;
+- its contamination is <10%.
 
-**Note**: this workflow is not intended for classify "finished" SAGs or MAGs.
+**Note**: this workflow **is not intended** for classify "finished" SAGs or MAGs.
 The "finished" category is reserved for genomes that can be assembled with
 extensive manual review and editing.
 

@@ -6,7 +6,7 @@ dereplication. Moreover, the workflow reports the prediction of rRNA and tRNA
 genes in accorfing to the MISAG and the MIMAG standards
 https://doi.org/10.1038/nbt.3893.
 
-Main features:
+## Main features
 
 - Input: prokaryotic genomes in FASTA format;
 - Completeness, contamination and strain heterogeneity estimates with

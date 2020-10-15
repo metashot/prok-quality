@@ -4,6 +4,7 @@ import sys
 
 import numpy as np
 import pandas as pd
+from sklearn import preprocessing
 
 
 DREP_CDB = sys.argv[1]
@@ -24,5 +25,8 @@ derep_info_df["Representative"] = \
 derep_info_df = derep_info_df[["secondary_cluster", "Representative"]]. \
     reset_index(). \
     rename(columns={"genome": "Genome", "secondary_cluster": "Cluster"})
+
+le = preprocessing.LabelEncoder()
+derep_info_df["Cluster"] = le.fit_transform(derep_info_df["Cluster"])
 
 derep_info_df.to_csv(DEREP_INFO, sep='\t', index=False)

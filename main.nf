@@ -15,7 +15,7 @@ genomes_checkm_tmp_ch
 process checkm {      
     tag "all"
 
-    publishDir "${params.outdir}/data/checkm" , mode: 'copy'
+    publishDir "${params.outdir}/checkm" , mode: 'copy'
 
     input:
     path(genomes) from genomes_checkm_ch.collect()
@@ -60,7 +60,7 @@ process checkm {
 process barrnap {
     tag "${id}"
 
-    publishDir "${params.outdir}/data/barrnap/${id}" , mode: 'copy'
+    publishDir "${params.outdir}/barrnap/${id}" , mode: 'copy'
 
     input:
     tuple val(id), path(genome) from genomes_barrnap_ch
@@ -91,7 +91,7 @@ process barrnap {
 process trnascan_se {
     tag "${id}"
 
-    publishDir "${params.outdir}/data/trnascan_se/${id}" , mode: 'copy'
+    publishDir "${params.outdir}/trnascan_se/${id}" , mode: 'copy'
 
     input:
     tuple val(id), path(genome) from genomes_trnascan_se_ch
@@ -179,17 +179,19 @@ process genome_filter {
     """
 }
 
-/*
- * Step 4. Dereplication
- */
+
 if (!params.skip_dereplication) {
+
+    /*
+     * Step 4.a Dereplication
+     */
     process drep {
         tag "all"
     
         publishDir "${params.outdir}" , mode: 'copy' ,
             pattern: 'filtered_derep/*'
     
-        publishDir "${params.outdir}/data" , mode: 'copy' ,
+        publishDir "${params.outdir}" , mode: 'copy' ,
             pattern: 'drep/{data_tables,figures,log}/*'
     
         input:
@@ -220,25 +222,27 @@ if (!params.skip_dereplication) {
         mv drep/dereplicated_genomes filtered_derep 
         """
     }
+
+    /*
+     * Step 4.b Derep info
+     */
+    process derep_info {
+        tag "all"
+
+        publishDir "${params.outdir}" , mode: 'copy'
+
+        input:
+        path 'Cdb.csv' from drep_cdb_derep_info_ch
+        path 'Wdb.csv' from drep_wdb_derep_info_ch
+
+        output:
+        path 'derep_info.tsv'
+
+        script:   
+        """
+        derep_info.py Cdb.csv Wdb.csv derep_info.tsv
+        """
+    }
 }
 
-/*
- * Step 5. Derep info
- */
-process derep_info {
-    tag "all"
 
-    publishDir "${params.outdir}" , mode: 'copy'
-
-    input:
-    path 'Cdb.csv' from drep_cdb_derep_info_ch
-    path 'Wdb.csv' from drep_wdb_derep_info_ch
-    
-    output:
-    path 'derep_info.tsv'
-    
-    script:   
-    """
-    derep_info.py Cdb.csv Wdb.csv derep_info.tsv
-    """
-}

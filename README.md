@@ -37,21 +37,20 @@ Several directories will be created in the `results` folder:
 - `genome_info.tsv`: summary of genomes quality (including completeness,
   contamination, N50, rRNA genes found, number of tRNA and tRNA types, see
   below). This file contains:
-    - Genome: genome filename
-    - Completeness, Contamination, ..., # predicted genes: summary of genome
+    - **Genome**: genome filename
+    - **Completeness, Contamination, ..., # predicted genes**: summary of genome
       quality (see
       https://github.com/Ecogenomics/CheckM/wiki/Genome-Quality-Commands#qa);
-    - 5S rRNA, 23S rRNA, 16S rRNA: Yes if the rRNA gene was found. High-quality
-      drafts should encode the 23S, 16S, and 5S rRNA genes
-    - \# tRNA, \# tRNA types: the number of tRNA and the number of the tRNA
+    - **5S rRNA, 23S rRNA, 16S rRNA**: Yes if the rRNA gene was found;
+    - **\# tRNA, \# tRNA types**: the number of tRNA and the number of the tRNA
        types found, respectively.
 
 - `filtered_all`: genomes filtered by the `--min_completeness` and
   `--max_contamination` options; 
 - `derep_info.tsv`: dereplication summary (when `--skip_dereplication=false`). This file contains:
-    - Genome: genome filename
-    - Cluster: the cluster ID (from 0 to N-1)
-    - Representative: is this genome the cluster representative?
+    - **Genome**: genome filename
+    - **Cluster**: the cluster ID (from 0 to N-1)
+    - **Representative**: is this genome the cluster representative?
 
 - `filtered_derep`: representative genomes (by dereplication, when
   `--skip_dereplication=false`).

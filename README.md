@@ -18,10 +18,7 @@ Main features:
   found) is reported;
 - Optionally perform the dereplication using [drep](https://github.com/MrOlm/drep).
 
-
-
 ## Quick start
-
 1. Install [Nextflow](https://www.nextflow.io/) and [Docker](https://www.docker.com/);
 1. Start running the analysis:
    
@@ -39,11 +36,23 @@ Several directories will be created in the `results` folder:
 ### Main outputs
 - `genome_info.tsv`: summary of genomes quality (including completeness,
   contamination, N50, rRNA genes found, number of tRNA and tRNA types, see
-  below);
+  below). This file contains:
+    - Genome: genome filename
+    - Completeness, Contamination, ..., # predicted genes: summary of genome
+      quality (see
+      https://github.com/Ecogenomics/CheckM/wiki/Genome-Quality-Commands#qa);
+    - 5S rRNA, 23S rRNA, 16S rRNA: Yes if the rRNA gene was found. High-quality
+      drafts should encode the 23S, 16S, and 5S rRNA genes
+    - \# tRNA, \# tRNA types: the number of tRNA and the number of the tRNA
+       types found, respectively.
+
 - `filtered_all`: genomes filtered by the `--min_completeness` and
   `--max_contamination` options; 
-- `derep_info.tsv`: dereplication summary (when `--skip_dereplication=false`),
-  see below; 
+- `derep_info.tsv`: dereplication summary (when `--skip_dereplication=false`). This file contains:
+    - Genome: genome filename
+    - Cluster: the cluster ID (from 0 to N-1)
+    - Representative: is this genome the cluster representative?
+
 - `filtered_derep`: representative genomes (by dereplication, when
   `--skip_dereplication=false`).
 
@@ -55,25 +64,11 @@ Several directories will be created in the `results` folder:
   bacteria (`.bac`) and archea (`.arc`) models;
 - `drep`: original data tables, figures and log of drep.
 
-#### The `genome_info.tsv` file
-- Genome: genome filename
-- Completeness, Contamination, ..., # predicted genes: summary of genome quality
-  (see https://github.com/Ecogenomics/CheckM/wiki/Genome-Quality-Commands#qa);
-- 5S rRNA, 23S rRNA, 16S rRNA: Yes if the rRNA gene was found. High-quality
-  drafts should encode the 23S, 16S, and 5S rRNA genes
-- \# tRNA, \# tRNA types: the number of tRNA and the number of the tRNA types
-  found, respectively.
-
-#### The `derep_info.tsv` file
-- Genome: genome filename
-- Cluster: the cluster ID (from 0 to N-1)
-- Representative: is this genome the cluster representative?
-
 ## MIMAG/MISAG standards
-Following MIMAG/MISAG standards for SAG and MAG, you can classify a prokaryotic
+Following MIMAG/MISAG standards, you can classify a prokaryotic
 genome as **high-quality draft** when:
-- Completeness: >90%;
-- Contamination <5%;
+- completeness: >90%;
+- contamination <5%;
 - presence of 23S, 16S, and 5S rRNA genes;
 - presence of at least 18 tRNA types;
 
@@ -134,18 +129,3 @@ singularity.autoMounts = true
 This workflow is maintained Davide Albanese and Claudio Donati at the [FEM's
 Unit of Computational
 Biology](https://www.fmach.it/eng/CRI/general-info/organisation/Chief-scientific-office/Computational-biology).
-
-
-
-# prok-quality
-
-TODO 
-
-Automatic classification of single amplified genomes (SAG) and
-Metagenome-assembled genomes (MAG) following the guidelines published in ..
-
-* CheckM
-* barrnap
-* tRNAscan-se
-* drep
-

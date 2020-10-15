@@ -1,9 +1,10 @@
 # metashot/prok-quality Nextflow
 
-metashot/prok-quality is a [Nextflow](https://www.nextflow.io/) pipeline for for
-assessing the quality of prokaryotic genomes, filtering and the dereplication.
-Moreover, the workflow reports the prediction of rRNA and tRNA genes in accorfing to 
-the MISAG and the MIMAG standards https://doi.org/10.1038/nbt.3893.
+metashot/prok-quality is a [Nextflow](https://www.nextflow.io/) pipeline for
+assessing the quality of prokaryotic genomes, performing genome filtering and
+dereplication. Moreover, the workflow reports the prediction of rRNA and tRNA
+genes in accorfing to the MISAG and the MIMAG standards
+https://doi.org/10.1038/nbt.3893.
 
 Main features:
 
@@ -32,10 +33,10 @@ Main features:
 
 See the file [`nextflow.config`](nextflow.config) for the complete list of parameters.
 
-### Output
+## Output
 Several directories will be created in the `results` folder:
 
-**Main outputs**
+### Main outputs
 - `genome_info.tsv`: summary of genomes quality (including completeness,
   contamination, N50, rRNA genes found, number of tRNA and tRNA types, see
   below);
@@ -46,7 +47,7 @@ Several directories will be created in the `results` folder:
 - `filtered_derep`: representative genomes (by dereplication, when
   `--skip_dereplication=false`).
 
-**Secondary outputs**
+### Secondary outputs
 - `checkm`: contains the original checkm's qc file;
 - `barrnap`: GFF and FASTA files containing the predicted rRNA sequences for
   bacteria (`.bac`) and archea (`.arc`) models;
@@ -64,6 +65,13 @@ This TSV file contains:
 - \# tRNA, \# tRNA types: the number of tRNA and the number of the tRNA types
   found, respectively.
 
+#### The `derep_info.tsv` file
+This TSV file contains:
+- Genome: genome filename
+- Cluster: the cluster ID (from 0 to N-1)
+- Representative: is this genome the cluster representative?
+
+## MIMAG/MISAG standards
 Following MIMAG/MISAG standards for SAG and MAG, you can classify a prokaryotic
 genome as **high-quality draft** when:
 - Completeness: >90%;
@@ -75,17 +83,10 @@ and **Medium-quality draft** when:
 - Completeness: >=50%;
 - Contamination <10%;
 
-**Note**
-This workflow is not intended for classify "finished" Single Amplified Genome
-(SAGs) or Metagenome-Assembled Genomes (MAGs). The "finished" category is
+**Note**: this workflow is not intended for classify "finished" Single Amplified
+Genome (SAGs) or Metagenome-Assembled Genomes (MAGs). The "finished" category is
 reserved for genomes that can be assembled with extensive manual review and
 editing.
-
-#### The `derep_info.tsv` file
-This TSV file contains:
-- Genome: genome filename
-- Cluster: the cluster ID (from 0 to N-1)
-- Representative: is this genome the cluster representative?
 
 ## System requirements
 Each step in the pipeline has a default set of requirements for number of CPUs,

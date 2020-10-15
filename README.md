@@ -56,7 +56,6 @@ Several directories will be created in the `results` folder:
 - `drep`: original data tables, figures and log of drep.
 
 #### The `genome_info.tsv` file
-This TSV file contains:
 - Genome: genome filename
 - Completeness, Contamination, ..., # predicted genes: summary of genome quality
   (see https://github.com/Ecogenomics/CheckM/wiki/Genome-Quality-Commands#qa);
@@ -66,7 +65,6 @@ This TSV file contains:
   found, respectively.
 
 #### The `derep_info.tsv` file
-This TSV file contains:
 - Genome: genome filename
 - Cluster: the cluster ID (from 0 to N-1)
 - Representative: is this genome the cluster representative?

@@ -35,8 +35,8 @@ Several directories will be created in the `results` folder:
 
 ### Main outputs
 - `genome_info.tsv`: summary of genomes quality (including completeness,
-  contamination, N50, rRNA genes found, number of tRNA and tRNA types, see
-  below). This file contains:
+  contamination, N50, rRNA genes found, number of tRNA and tRNA types). This
+  file contains:
     - **Genome**: genome filename
     - **Completeness, Contamination, ..., # predicted genes**: summary of genome
       quality (see
@@ -67,18 +67,17 @@ Several directories will be created in the `results` folder:
 Following MIMAG/MISAG standards, you can classify a prokaryotic
 genome as **high-quality draft** when:
 - completeness: >90%;
-- contamination <5%;
+- contamination: <5%;
 - presence of 23S, 16S, and 5S rRNA genes;
-- presence of at least 18 tRNA types;
+- presence of at least 18 tRNA types.
 
-and **Medium-quality draft** when:
-- Completeness: >=50%;
-- Contamination <10%;
+A genome can be classified as **medium-quality draft** when:
+- completeness: >=50%;
+- contamination: <10%.
 
-**Note**: this workflow is not intended for classify "finished" Single Amplified
-Genome (SAGs) or Metagenome-Assembled Genomes (MAGs). The "finished" category is
-reserved for genomes that can be assembled with extensive manual review and
-editing.
+**Note**: this workflow is not intended for classify "finished" SAGs or MAGs.
+The "finished" category is reserved for genomes that can be assembled with
+extensive manual review and editing.
 
 ## System requirements
 Each step in the pipeline has a default set of requirements for number of CPUs,

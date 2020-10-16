@@ -63,7 +63,7 @@ Several directories will be created in the `results` folder:
   bacteria (`.bac`) and archea (`.arc`) models;
 - `drep`: original data tables, figures and log of drep.
 
-## MIMAG/MISAG standards
+## A note on MIMAG/MISAG standards
 Following MIMAG/MISAG standards, you can classify a prokaryotic
 genome as **high-quality draft** when:
 - its completeness is >90%;
@@ -79,7 +79,7 @@ A genome can be classified as **medium-quality draft** when:
 The "finished" category is reserved for genomes that can be assembled with
 extensive manual review and editing.
 
-## Dereplication
+## A note on dereplication
 For each cluster, the genome with the higher score is selected as
 representative. The score is computed using the following formula:
 

@@ -79,6 +79,14 @@ A genome can be classified as **medium-quality draft** when:
 The "finished" category is reserved for genomes that can be assembled with
 extensive manual review and editing.
 
+## Dereplication
+For each cluster, the genome with the higher score is selected as
+representative. The score is computed using the following formula:
+
+```
+score = completeness - 5 x contamination + 0.5 x log(N50)
+```
+
 ## System requirements
 Each step in the pipeline has a default set of requirements for number of CPUs,
 memory and time. For some of the steps in the pipeline, if the job exits with an

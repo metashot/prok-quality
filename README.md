@@ -52,9 +52,6 @@ Several directories will be created in the `results` folder:
   - **Genome**: genome filename
   - **Cluster**: the cluster ID (from 0 to N-1)
   - **Representative**: is this genome the cluster representative?
-    
-  By default the dereplication is performed with the species-level ANI
-  threshold (0.95, parameter `--ani_thr`).
 
 - `filtered_derep`: representative genomes (by dereplication, when
   `--skip_dereplication=false`).
@@ -67,9 +64,9 @@ Several directories will be created in the `results` folder:
   bacteria (`.bac`) and archea (`.arc`) models;
 - `drep`: original data tables, figures and log of drep.
 
-## A note on MIMAG/MISAG standards
-Following MIMAG/MISAG standards, you can classify a prokaryotic
-genome as **high-quality draft** when:
+## MIMAG/MISAG standards
+Following MIMAG/MISAG standards, you can classify a prokaryotic genome as
+**high-quality draft** when:
 - its completeness is >90%;
 - its contamination is <5%;
 - 23S, 16S, and 5S rRNA genes can be predicted;
@@ -79,17 +76,19 @@ A genome can be classified as **medium-quality draft** when:
 - its completeness is >=50%;
 - its contamination is <10%.
 
-**Note**: this workflow **is not intended** for classify "finished" SAGs or MAGs.
-The "finished" category is reserved for genomes that can be assembled with
-extensive manual review and editing.
+This workflow **is not intended** for classify "finished" SAGs or MAGs. The
+"finished" category is reserved for genomes that can be assembled with extensive
+manual review and editing.
 
-## A note on dereplication
-For each cluster, the genome with the higher score is selected as
-representative. The score is computed using the following formula:
+## Dereplication
+- For each cluster, the genome with the higher score is selected as
+  representative. The score is computed using the following formula:
 
-```
-score = completeness - 5 x contamination + 0.5 x log(N50)
-```
+  ```
+  score = completeness - 5 x contamination + 0.5 x log(N50)
+  ```
+- By default the dereplication is performed with the species-level ANI threshold
+  (0.95, parameter `--ani_thr`).
 
 ## System requirements
 Each step in the pipeline has a default set of requirements for number of CPUs,

@@ -1,10 +1,9 @@
 # metashot/prok-quality Nextflow
 
 metashot/prok-quality is a [Nextflow](https://www.nextflow.io/) pipeline for
-assessing the quality of prokaryotic genomes, performing genome filtering and
-dereplication. Moreover, the workflow reports the prediction of rRNA and tRNA
-genes in accorfing to the MISAG and the MIMAG standards
-https://doi.org/10.1038/nbt.3893.
+assessing the quality of prokaryotic genomes including the prediction of rRNA
+and tRNA genes (in according to the MISAG and the MIMAG standards
+https://doi.org/10.1038/nbt.3893).
 
 ## Main features
 
@@ -104,7 +103,6 @@ You can customize the compute resources that the pipeline requests by either:
   (`-c` or `-C` parameters), or
 - modifying the [`process.config`](process.config) file.
 
-### CheckM
 CheckM requires approximately 40 GB of memory. However, if you have only 16 GB
 RAM, a reduced genome tree (`--reduced_tree` option) can also be used (see
 https://github.com/Ecogenomics/CheckM/wiki/Installation#system-requirements).
@@ -135,6 +133,6 @@ singularity.autoMounts = true
 ```
 
 ## Credits
-This workflow is maintained Davide Albanese and Claudio Donati at the [FEM's
+This workflow is maintained by Davide Albanese and Claudio Donati at the [FEM's
 Unit of Computational
 Biology](https://www.fmach.it/eng/CRI/general-info/organisation/Chief-scientific-office/Computational-biology).

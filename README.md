@@ -2,10 +2,13 @@
 
 metashot/prok-quality is a pipeline for assessing the quality of prokaryotic
 genomes including the prediction of rRNA and tRNA genes (in according to the
-MISAG and the MIMAG standards[^1].
+[MISAG and the MIMAG standards](https://doi.org/10.1038/nbt.3893).
+
+*Note*: This workflow **is not intended** for classify "finished" SAGs or MAGs. The
+"finished" category is reserved for genomes that can be assembled with extensive
+manual review and editing.
 
 - [MetaShot Home](https://metashot.github.io/)
-
 
 ## Main features
 
@@ -22,7 +25,7 @@ MISAG and the MIMAG standards[^1].
 ## Quick start
 
 1. Install Docker (or Singulariry) and Nextflow (see
-   [Dependences](https://metashot.github.io/#dependencies));
+   [Dependencies](https://metashot.github.io/#dependencies));
 1. Start running the analysis:
    
   ```bash
@@ -32,9 +35,8 @@ MISAG and the MIMAG standards[^1].
   ```
 
 ## Parameters
-See the file
-[`nextflow.config`](nextflow.config)
-for the complete list of parameters.
+See the file [`nextflow.config`](nextflow.config) for the complete list of
+parameters.
 
 ## Output
 The files and directories listed below will be created in the `results`
@@ -71,7 +73,7 @@ directory after the pipeline has finished.
 ## Documetation
 
 ### MIMAG/MISAG standards
-Following MIMAG/MISAG standards[^1], you can classify a prokaryotic genome as
+Following MIMAG/MISAG standards, you can classify a prokaryotic genome as
 **high-quality draft** when:
 - its completeness is >90% and the contamination is <5%;
 - 23S, 16S, and 5S rRNA genes can be predicted;
@@ -79,11 +81,6 @@ Following MIMAG/MISAG standards[^1], you can classify a prokaryotic genome as
 
 A genome can be classified as **medium-quality draft** when its completeness is
 >=50% and the contamination is <10%.
-
-#### Note
-This workflow **is not intended** for classify "finished" SAGs or MAGs. The
-"finished" category is reserved for genomes that can be assembled with extensive
-manual review and editing.
 
 ### Dereplication
 For each cluster, the genome with the higher score is selected as
@@ -103,10 +100,3 @@ list of system requirements options.
 CheckM requires approximately 40 GB of memory. However, if you have only 16 GB
 RAM, a reduced genome tree (`--reduced_tree` option) can also be used (see
 https://github.com/Ecogenomics/CheckM/wiki/Installation#system-requirements).
-
----
-
-[^1]: Bowers R., Kyrpides N., Stepanauskas R. et al. *Minimum information about
-      a single amplified genome (MISAG) and a metagenome-assembled genome
-      (MIMAG) of bacteria and archaea*. Nat. Biotechnol. 35, 725–731 (2017).
-      [Link[(https://doi.org/10.1038/nbt.3893).

@@ -35,7 +35,7 @@ workflow {
     trnascan_se(genomes_ch)
 
     genome_info(checkm_qa_ch, barrnap.out.gff.collect(),
-        trnascan_se.out.collect())
+        trnascan_se.out.outs.collect())
     
     genome_filter(genome_info.out.table, genomes_checkm_ch)
 

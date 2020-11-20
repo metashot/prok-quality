@@ -46,3 +46,4 @@ workflow {
         drep(genome_info.out.table_drep, genomes_checkm_ch)
         derep_info(drep.out.cdb, drep.out.wdb)  
     }
+}

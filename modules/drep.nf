@@ -2,7 +2,7 @@ nextflow.enable.dsl=2
 
 process drep {
     publishDir "${params.outdir}" , mode: 'copy' ,
-        pattern: 'filtered_derep/*'
+        pattern: 'filtered_repr/*'
 
     publishDir "${params.outdir}" , mode: 'copy' ,
         pattern: 'drep/{data_tables,figures,log}/*'

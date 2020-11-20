@@ -35,7 +35,7 @@ process genome_filter {
     path(genomes)
 
     output:
-    path 'filtered_all/*'
+    path 'filtered/*'
     
     script:   
     """
@@ -44,7 +44,7 @@ process genome_filter {
     genome_filter.py \
         genome_info.tsv \
         genomes_dir \
-        filtered_all \
+        filtered \
         ${params.min_completeness} \
         ${params.max_contamination}
     """

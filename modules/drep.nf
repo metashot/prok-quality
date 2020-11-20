@@ -12,7 +12,7 @@ process drep {
     path(genomes)
 
     output:
-    path 'filtered_derep/*'
+    path 'filtered_repr/*'
     path 'drep/{data_tables,figures,log}/*'
     path 'drep/data_tables/Cdb.csv', emit: cdb
     path 'drep/data_tables/Wdb.csv', emit: wdb
@@ -32,6 +32,6 @@ process drep {
         -strW 0 \
         -g genomes_dir/*
 
-    mv drep/dereplicated_genomes filtered_derep 
+    mv drep/dereplicated_genomes filtered_repr
     """
 }

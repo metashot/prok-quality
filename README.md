@@ -80,7 +80,7 @@ Following MIMAG/MISAG standards, you can classify a prokaryotic genome as
 - at least 18 tRNA types can be predicted.
 
 A genome can be classified as **medium-quality draft** when its completeness is
->=50% and the contamination is <10%.
+\>=50% and the contamination is <10%.
 
 ### Dereplication
 For each cluster, the genome with the higher score is selected as

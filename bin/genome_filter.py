@@ -7,9 +7,10 @@ import shutil
 
 import pandas as pd
 
-INPUT_GENOMES_DIR = sys.argv[1]
-FILTERED_GENOMES_DIR = sys.argv[2]
-GENOME_INFO = sys.argv[3]
+
+GENOME_INFO = sys.argv[1]
+INPUT_GENOMES_DIR = sys.argv[2]
+FILTERED_GENOMES_DIR = sys.argv[3]
 MIN_COMPLETENESS = float(sys.argv[4])
 MAX_CONTAMINATION = float(sys.argv[5])
 

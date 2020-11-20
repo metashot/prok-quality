@@ -1,248 +1,48 @@
 #!/usr/bin/env nextflow
 
-Channel
-    .fromPath( params.genomes )
-    .map { file -> tuple(file.baseName, file) }
-    .into { genomes_checkm_tmp_ch; genomes_barrnap_ch; genomes_trnascan_se_ch } 
+nextflow.enable.dsl=2
 
-genomes_checkm_tmp_ch
-    .map { row -> row[1] }
-    .into { genomes_checkm_ch; genomes_drep_ch; genomes_genome_filter_ch }
+include { checkm } from './modules/checkm'
+include { barrnap } from './modules/barrnap'
+include { trnascan_se } from './modules/trnascan_se'
+include { drep } from './modules/drep'
+include { genome_info, genome_filter, derep_info } from './modules/utils'
 
-/*
- * Step 0. CheckM
- */
-process checkm {      
-    tag "all"
+workflow {
 
-    publishDir "${params.outdir}/checkm" , mode: 'copy'
+    Channel
+        .fromPath( params.genomes )
+        .map { file -> tuple(file.baseName, file) }
+        .into { genomes_ch } 
 
-    input:
-    path(genomes) from genomes_checkm_ch.collect()
-
-    output:
-    path 'qa.txt' into checkm_qa_extract_info_ch
-    
-    script:
-    reduced_tree = params.reduced_tree ? "--reduced_tree" : ""
-    """   
-    mkdir -p genomes_dir
-    mkdir -p tmp
-    for genome in $genomes
-    do
-        mv \$genome genomes_dir/\${genome}.fa
-    done
-   
-    checkm lineage_wf \
-        --tmpdir tmp \
-        -t ${task.cpus} \
-        -x fa \
-        ${reduced_tree} \
-        genomes_dir \
-        checkm
-    
-    checkm qa \
-        --tmpdir tmp \
-        -t ${task.cpus} \
-        --tab_table \
-        -o 2 \
-        -f qa.txt \
-        checkm/lineage.ms \
-        checkm 
-    
-    rm -rf tmp/
-    """
-}
-
-/*
- * Step 1.a barrnap
- */
-process barrnap {
-    tag "${id}"
-
-    publishDir "${params.outdir}/barrnap/${id}" , mode: 'copy'
-
-    input:
-    tuple val(id), path(genome) from genomes_barrnap_ch
-
-    output:
-    path '*.rRNA.{bac,arc}.gff' into rrna_gff_extract_info_ch
-    path '*.rRNA.{bac,arc}.fa'
-
-    script:
-    """
-    barrnap \
-        --kingdom bac \
-        --outseq ${id}.rRNA.bac.fa \
-        --threads ${task.cpus} \
-        ${genome} > ${id}.rRNA.bac.gff
-
-    barrnap \
-        --kingdom arc \
-        --outseq ${id}.rRNA.arc.fa \
-        --threads ${task.cpus} \
-        ${genome} > ${id}.rRNA.arc.gff
-    """
-}
-
-/*
- * Step 1.b tRNAscan
- */
-process trnascan_se {
-    tag "${id}"
-
-    publishDir "${params.outdir}/trnascan_se/${id}" , mode: 'copy'
-
-    input:
-    tuple val(id), path(genome) from genomes_trnascan_se_ch
-
-    output:
-    path '*.tRNA.{bac,arc}.out' into trna_out_extract_info_ch
-    path '*.tRNA.{bac,arc}.fa'
-
-    script:
-    """
-    tRNAscan-SE \
-        --nopseudo \
-        -B \
-        --thread ${task.cpus} \
-        --fasta ${id}.tRNA.bac.fa \
-        -o ${id}.tRNA.bac.out \
-        ${genome}
-
-    tRNAscan-SE \
-        --nopseudo \
-        -A \
-        --thread ${task.cpus} \
-        --fasta ${id}.tRNA.arc.fa \
-        -o ${id}.tRNA.arc.out \
-        ${genome}
-    """
-}
-
-/*
- * Step 2. Genome info
- */
-process genome_info {      
-    tag "all"
-
-    publishDir "${params.outdir}" , mode: 'copy' ,
-        pattern :'genome_info.tsv'
-
-    input:
-    path('checkm_qa.txt') from checkm_qa_extract_info_ch
-    path(rrna_gffs) from rrna_gff_extract_info_ch.collect()
-    path(trna_outs) from trna_out_extract_info_ch.collect()
-   
-    output:
-    path 'genome_info.tsv' into genome_info_genome_filter_ch 
-    path 'genome_info_drep.csv' into genome_info_drep_ch 
-
-    script:
-    reduced_tree = params.reduced_tree ? "--reduced_tree" : ""
-    """
-    mkdir rtrna_dir
-    mv $rrna_gffs $trna_outs rtrna_dir
-    genome_info.py \
-        checkm_qa.txt \
-        rtrna_dir \
-        genome_info.tsv \
-        genome_info_drep.csv
-    """
-}
-
-/*
- * Step 3. Genome filter
- */
-process genome_filter {
-    tag "all"
-
-    publishDir "${params.outdir}" , mode: 'copy'
-
-    input:
-    path 'genome_info.tsv' from genome_info_genome_filter_ch
-    path(genomes) from genomes_genome_filter_ch.collect()
-
-    output:
-    path 'filtered_all/*'
-    
-    script:   
-    """
-    mkdir genomes_dir
-    mv $genomes genomes_dir
-    genome_filter.py \
-        genomes_dir \
-        filtered_all \
-        genome_info.tsv \
-        ${params.min_completeness} \
-        ${params.max_contamination}
-    """
-}
-
-
-if (!params.skip_dereplication) {
-
-    /*
-     * Step 4.a Dereplication
+    /* collate genomes in chunks of params.batch_size, see 
+     * https://github.com/Ecogenomics/CheckM/issues/118
      */
-    process drep {
-        tag "all"
+    genomes_ch
+        .map { row -> row[1] }
+        .collate( params.batch_size )
+        .set { genomes_checkm_ch }
+
+    checkm(genomes_checkm_ch)
+
+    checkm.out.qa
+        .collectFile(
+            name:'qa.txt', 
+            keepHeader: true,
+            skip: 1,
+            storeDir: "${params.outdir}/checkm",
+            newLine: true)
+        .set { checkm_qa_ch }
+
+    barrnap(genomes_ch)
+    trnascan_se(genomes_ch)
+
+    genome_info(checkm_qa_ch, barrnap.out.gff.collect(),
+        trnascan_se.out.collect())
     
-        publishDir "${params.outdir}" , mode: 'copy' ,
-            pattern: 'filtered_derep/*'
-    
-        publishDir "${params.outdir}" , mode: 'copy' ,
-            pattern: 'drep/{data_tables,figures,log}/*'
-    
-        input:
-        path 'genome_info_drep.csv' from genome_info_drep_ch
-        path(genomes) from genomes_drep_ch.collect()
-    
-        output:
-        path 'filtered_derep/*'
-        path 'drep/{data_tables,figures,log}/*'
-        path 'drep/data_tables/Cdb.csv' into drep_cdb_derep_info_ch
-        path 'drep/data_tables/Wdb.csv' into drep_wdb_derep_info_ch
-    
-        script:   
-        """
-        mkdir genomes_dir
-        mv $genomes genomes_dir
-        dRep dereplicate \
-            drep \
-            --genomeInfo genome_info_drep.csv \
-            -p ${task.cpus} \
-            -nc ${params.min_overlap} \
-            -sa ${params.ani_thr} \
-            -comp ${params.min_completeness} \
-            -con ${params.max_contamination} \
-            -strW 0 \
-            -g genomes_dir/*
-    
-        mv drep/dereplicated_genomes filtered_derep 
-        """
+    genome_filter(genome_info.out.table, genomes_checkm_ch)
+
+    if (!params.skip_dereplication) {
+        drep(genome_info.out.table_drep, genomes_checkm_ch)
+        derep_info(drep.out.cdb, drep.out.wdb)  
     }
-
-    /*
-     * Step 4.b Derep info
-     */
-    process derep_info {
-        tag "all"
-
-        publishDir "${params.outdir}" , mode: 'copy'
-
-        input:
-        path 'Cdb.csv' from drep_cdb_derep_info_ch
-        path 'Wdb.csv' from drep_wdb_derep_info_ch
-
-        output:
-        path 'derep_info.tsv'
-
-        script:   
-        """
-        derep_info.py Cdb.csv Wdb.csv derep_info.tsv
-        """
-    }
-}
-
-

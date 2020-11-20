@@ -23,7 +23,7 @@ process drep {
     mv $genomes genomes_dir
     dRep dereplicate \
         drep \
-        --genomeInfo genome_info_drep.csv \
+        --genomeInfo genomeinfo.csv \
         -p ${task.cpus} \
         -nc ${params.min_overlap} \
         -sa ${params.ani_thr} \

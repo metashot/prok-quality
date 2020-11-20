@@ -37,10 +37,10 @@ workflow {
     genome_info(checkm_qa_ch, barrnap.out.gff.collect(),
         trnascan_se.out.out.collect())
     
-    genome_filter(genome_info.out.table, genomes_checkm_ch)
+    genome_filter(genome_info.out.table, genomes_ch.flatten().collect())
 
     if (!params.skip_dereplication) {
-        drep(genome_info.out.table_drep, genomes_checkm_ch)
+        drep(genome_info.out.table_drep, genomes_checkm_ch.flatten().collect())
         derep_info(drep.out.cdb, drep.out.wdb)  
     }
 }

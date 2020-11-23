@@ -4,9 +4,9 @@ metashot/prok-quality is a pipeline for assessing the quality of prokaryotic
 genomes including the prediction of rRNA and tRNA genes (in according to the
 [MISAG and the MIMAG standards](https://doi.org/10.1038/nbt.3893).
 
-*Note*: This workflow **is not intended** for classify "finished" SAGs or MAGs. The
-"finished" category is reserved for genomes that can be assembled with extensive
-manual review and editing.
+*Note*: This workflow is not intended for classify "finished" SAGs or MAGs.
+The "finished" category is reserved for genomes that can be assembled with
+extensive manual review and editing.
 
 - [MetaShot Home](https://metashot.github.io/)
 
@@ -97,6 +97,11 @@ Please refer to [System
 requirements](https://metashot.github.io/#system-requirements) for the complete
 list of system requirements options.
 
+### Memory
 CheckM requires approximately 40 GB of memory. However, if you have only 16 GB
 RAM, a reduced genome tree (`--reduced_tree` option) can also be used (see
 https://github.com/Ecogenomics/CheckM/wiki/Installation#system-requirements).
+
+### Disk
+For each GB of input data the workflow requires approximately 0.5/1 GB for the
+final output and 2 GB for the working directory.

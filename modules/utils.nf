@@ -14,7 +14,6 @@ process genome_info {
     path 'genome_info_drep.csv', emit: table_drep
 
     script:
-    reduced_tree = params.reduced_tree ? "--reduced_tree" : ""
     """
     mkdir rtrna_dir
     mv $barrnap_gffs $trnascan_se_outs rtrna_dir

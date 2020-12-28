@@ -6,6 +6,7 @@ include { checkm } from './modules/checkm'
 include { barrnap } from './modules/barrnap'
 include { trnascan_se } from './modules/trnascan_se'
 include { drep } from './modules/drep'
+include { gunc } from './modules/gunc'
 include { genome_info; genome_filter; derep_info } from './modules/utils'
 
 workflow {
@@ -17,11 +18,11 @@ workflow {
     /* collate genomes in chunks of params.batch_size, see 
      * https://github.com/Ecogenomics/CheckM/issues/118
      */
-    genomes_checkm_ch = genomes_ch
+    genomes_batch_ch = genomes_ch
         .map { row -> row[1] }
         .collate( params.batch_size )
 
-    checkm(genomes_checkm_ch)
+    checkm(genomes_batch_ch)
 
     checkm_qa_ch = checkm.out.qa
         .collectFile(
@@ -34,13 +35,18 @@ workflow {
     barrnap(genomes_ch)
     trnascan_se(genomes_ch)
 
+    if (params.use_gunc) {
+        gunc_db = file(params.gunc_db, type: 'dir', checkIfExists: true)
+        gunc(genomes_ch, gunc_db)
+    }
+
     genome_info(checkm_qa_ch, barrnap.out.gff.collect(),
         trnascan_se.out.out.collect())
     
-    genome_filter(genome_info.out.table, genomes_checkm_ch.flatten().collect())
+    genome_filter(genome_info.out.table, genomes_batch_ch.flatten().collect())
 
     if (!params.skip_dereplication) {
-        drep(genome_info.out.table_drep, genomes_checkm_ch.flatten().collect())
+        drep(genome_info.out.table_drep, genomes_batch_ch.flatten().collect())
         derep_info(drep.out.cdb, drep.out.wdb)  
     }
 }

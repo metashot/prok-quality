@@ -37,7 +37,14 @@ workflow {
 
     if (params.use_gunc) {
         gunc_db = file(params.gunc_db, type: 'dir', checkIfExists: true)
-        gunc(genomes_ch, gunc_db)
+        gunc(genomes_batch_ch, gunc_db)
+        gunc_maxcss_ch = gunc.out.maxcss
+        .collectFile(
+            name:'gunc.tsv', 
+            keepHeader: true,
+            skip: 1,
+            storeDir: "${params.outdir}",
+            newLine: true)
     }
 
     genome_info(checkm_qa_ch, barrnap.out.gff.collect(),

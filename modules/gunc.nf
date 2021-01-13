@@ -1,23 +1,25 @@
 nextflow.enable.dsl=2
 
 process gunc {
-    tag "${id}"
-
-    publishDir "${params.outdir}/gunc" , mode: 'copy'
-
     input:
-    tuple val(id), path(genome)
+    path(genomes)
     path(gunc_db)
 
     output:
-    path '${id}/*'
+    path 'GUNC.maxCSS_level.tsv', emit: maxcss
 
     script:
     """
+    mkdir -p genomes_dir
+    mkdir -p tmp
+    for genome in $genomes
+    do
+        mv \$genome genomes_dir/\${genome}.fa
+    done
+
     gunc run \
-        -i ${genome} \
+        --input_dir genomes_dir \
         -d ${gunc_db} \
-        -t ${task.cpus} \
-        -o ${id}
+        -t ${task.cpus}
     """
 }

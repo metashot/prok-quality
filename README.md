@@ -33,6 +33,9 @@ extensive manual review and editing.
     --genomes '*.fa' \
     --outdir results
   ```
+GUNC_DB=/path/to/gunc_db
+docker run --rm -v${GUNC_DB}:/guncdb -w /guncdb metashot/gunc:1.0.1-1 gunc download_db .
+
 
 ## Parameters
 See the file [`nextflow.config`](nextflow.config) for the complete list of

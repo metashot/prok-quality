@@ -15,15 +15,13 @@ workflow {
         .fromPath( params.genomes )
         .map { file -> tuple(file.baseName, file) }
 
+    /* CheckM */
     /* collate genomes in chunks of params.batch_size, see 
-     * https://github.com/Ecogenomics/CheckM/issues/118
-     */
-    genomes_batch_ch = genomes_ch
+     * https://github.com/Ecogenomics/CheckM/issues/118 */
+    genomes_batch_checkm_ch = genomes_ch
         .map { row -> row[1] }
-        .collate( params.batch_size )
-
-    checkm(genomes_batch_ch)
-
+        .collate( params.checkm_batch_size )
+    checkm(genomes_batch_checkm_ch)
     checkm_qa_ch = checkm.out.qa
         .collectFile(
             name:'qa.txt', 
@@ -32,20 +30,33 @@ workflow {
             storeDir: "${params.outdir}/checkm",
             newLine: true)
 
+    /* rRNAs and tRNAs */
     barrnap(genomes_ch)
     trnascan_se(genomes_ch)
 
-    if (params.use_gunc) {
-        gunc_db = file(params.gunc_db, type: 'dir', checkIfExists: true)
+    /* GUNC */
+    if (!params.skip_gunc) {
+        genomes_batch_gunc_ch = genomes_ch
+            .map { row -> row[1] }
+            .collate( params.gunc_batch_size )
+
+        if (params.gunc_db == 'none') {
+            gunc_db_download()
+            gunc_db = gunc_db_download.out.gunc_db.first()
+        }
+        else {
+            gunc_db = file(params.gunc_db, checkIfExists: true)
+        }
+
         gunc(genomes_batch_ch, gunc_db)
-        gunc_maxcss_ch = gunc.out.maxcss
+        gunc_maxcss_ch = gunc.out.maxcss_level
         .collectFile(
             name:'gunc.tsv', 
             keepHeader: true,
             skip: 1,
             storeDir: "${params.outdir}",
             newLine: true)
-    }
+    }  
 
     genome_info(checkm_qa_ch, barrnap.out.gff.collect(),
         trnascan_se.out.out.collect())

@@ -15,13 +15,15 @@ workflow {
         .fromPath( params.genomes )
         .map { file -> tuple(file.baseName, file) }
 
+    genomes_noid_ch = genomes_ch
+        .map { row -> row[1] }
+
     /* CheckM */
     /* collate genomes in chunks of params.batch_size, see 
      * https://github.com/Ecogenomics/CheckM/issues/118 */
-    genomes_batch_checkm_ch = genomes_ch
-        .map { row -> row[1] }
+    checkm_genomes_batch_ch = genomes_noid_ch
         .collate( params.checkm_batch_size )
-    checkm(genomes_batch_checkm_ch)
+    checkm(checkm_genomes_batch_ch)
     checkm_qa_ch = checkm.out.qa
         .collectFile(
             name:'qa.txt', 
@@ -36,8 +38,7 @@ workflow {
 
     /* GUNC */
     if (!params.skip_gunc) {
-        genomes_batch_gunc_ch = genomes_ch
-            .map { row -> row[1] }
+        gunc_genomes_batch_ch = genomes_noid_ch
             .collate( params.gunc_batch_size )
 
         if (params.gunc_db == 'none') {
@@ -48,7 +49,7 @@ workflow {
             gunc_db = file(params.gunc_db, checkIfExists: true)
         }
 
-        gunc(genomes_batch_ch, gunc_db)
+        gunc(gunc_genomes_batch_ch, gunc_db)
         gunc_maxcss_ch = gunc.out.maxcss_level
         .collectFile(
             name:'gunc.tsv', 
@@ -61,10 +62,11 @@ workflow {
     genome_info(checkm_qa_ch, barrnap.out.gff.collect(),
         trnascan_se.out.out.collect())
     
-    genome_filter(genome_info.out.table, genomes_batch_ch.flatten().collect())
+    
+    genome_filter(genome_info.out.table, genomes_noid_ch.collect())
 
     if (!params.skip_dereplication) {
-        drep(genome_info.out.table_drep, genomes_batch_ch.flatten().collect())
+        drep(genome_info.out.table_drep, genomes_noid_ch.collect())
         derep_info(drep.out.cdb, drep.out.wdb)  
     }
 }

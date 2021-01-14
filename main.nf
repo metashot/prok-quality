@@ -56,7 +56,7 @@ workflow {
             keepHeader: true,
             skip: 1,
             storeDir: "${params.outdir}",
-            newLine: true)
+            newLine: false)
     }  
 
     genome_info(checkm_qa_ch, barrnap.out.gff.collect(),

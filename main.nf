@@ -6,7 +6,7 @@ include { checkm } from './modules/checkm'
 include { barrnap } from './modules/barrnap'
 include { trnascan_se } from './modules/trnascan_se'
 include { drep } from './modules/drep'
-include { gunc } from './modules/gunc'
+include { gunc_db_download; gunc } from './modules/gunc'
 include { genome_info; genome_filter; derep_info } from './modules/utils'
 
 workflow {

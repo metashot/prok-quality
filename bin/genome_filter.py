@@ -33,7 +33,7 @@ genome_info_df = pd.read_table(GENOME_INFO,
 filtered_genome_info_df = genome_info_df[
     (genome_info_df["Completeness"] >= MIN_COMPLETENESS) & \
     (genome_info_df["Contamination"] <= MAX_CONTAMINATION) & \
-    !(GUNC_FILTER & !genome_info_df["GUNC pass"])
+    ~(GUNC_FILTER & ~genome_info_df["GUNC pass"])
     ]
 
 filtered_genome_info_df.apply(filter, axis=1)

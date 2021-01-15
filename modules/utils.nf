@@ -42,7 +42,7 @@ process genome_filter {
     output:
     path 'genome_info_filtered.tsv', emit: table
     path 'genome_info_filtered_drep.csv', emit: table_drep
-    path 'filtered/*', emit: genomes_filtered
+    path 'filtered/*', emit: genomes
     
     script:
     gunc_filter = params.gunc_filter ? "1" : "0"

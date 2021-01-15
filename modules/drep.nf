@@ -27,6 +27,7 @@ process drep {
         -p ${task.cpus} \
         -nc ${params.min_overlap} \
         -sa ${params.ani_thr} \
+        -l 1 \
         -comp ${params.min_completeness} \
         -con ${params.max_contamination} \
         -strW 0 \

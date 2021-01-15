@@ -37,36 +37,39 @@ workflow {
     trnascan_se(genomes_ch)
 
     /* GUNC */
-    if (!params.skip_gunc) {
-        gunc_genomes_batch_ch = genomes_noid_ch
-            .collate( params.gunc_batch_size )
+    gunc_genomes_batch_ch = genomes_noid_ch
+        .collate( params.gunc_batch_size )
 
-        if (params.gunc_db == 'none') {
-            gunc_db_download()
-            gunc_db = gunc_db_download.out.gunc_db.first()
-        }
-        else {
-            gunc_db = file(params.gunc_db, checkIfExists: true)
-        }
+    if (params.gunc_db == 'none') {
+        gunc_db_download()
+        gunc_db = gunc_db_download.out.gunc_db
+    }
+    else {
+        gunc_db = file(params.gunc_db, checkIfExists: true)
+    }
 
-        gunc(gunc_genomes_batch_ch, gunc_db)
-        gunc_maxcss_ch = gunc.out.maxcss_level
+    gunc(gunc_genomes_batch_ch, gunc_db)
+    gunc_maxcss_ch = gunc.out.maxcss_level
         .collectFile(
-            name:'gunc.tsv', 
+            name:'GUNC.maxCSS_level.tsv', 
             keepHeader: true,
             skip: 1,
-            storeDir: "${params.outdir}",
+            storeDir: "${params.outdir}/gunc",
             newLine: false)
-    }  
-
-    genome_info(checkm_qa_ch, barrnap.out.gff.collect(),
+   
+    /* Build the genome_info.tsv table */
+    genome_info(
+        checkm_qa_ch,
+        gunc_maxcss_ch,
+        barrnap.out.gff.collect(),
         trnascan_se.out.out.collect())
     
-    
+    /* Filter genomes*/
     genome_filter(genome_info.out.table, genomes_noid_ch.collect())
 
+    /* Dereplication */
     if (!params.skip_dereplication) {
-        drep(genome_info.out.table_drep, genomes_noid_ch.collect())
-        derep_info(drep.out.cdb, drep.out.wdb)  
+        drep(genome_filter.out.table_drep, genome_filter.out.genomes.collect())
+        derep_info(drep.out.cdb, drep.out.wdb)
     }
 }

@@ -8,9 +8,10 @@ import pandas as pd
 
 
 CHECKM_QA = sys.argv[1]
-RTRNA_DIR = sys.argv[2]
-GENOME_INFO = sys.argv[3]
-GENOME_INFO_DREP = sys.argv[4]
+GUNC_OUT = sys.arg[2]
+BARRNAP_DIR = sys.argv[3]
+TRNASCAN_DIR = sys.argv[4]
+GENOME_INFO = sys.argv[5]
 
 
 usecols_checkm = [
@@ -34,6 +35,11 @@ usecols_checkm = [
     "# predicted genes"
 ]
 
+usecols_gunc = [
+    "genome",
+    "pass.GUNC"
+]
+
 
 def get_rrna(row):
 
@@ -50,7 +56,7 @@ def get_rrna(row):
     genome_id = os.path.splitext(row["Genome"])[0]
     for k in ["bac", "arc"]:
 
-        gff_fn = os.path.join(RTRNA_DIR, "{}.rRNA.{}.gff".format(genome_id, k))
+        gff_fn = os.path.join(BARRNAP_DIR, "{}.rRNA.{}.gff".format(genome_id, k))
         
         try:
             gff_df = pd.read_table(gff_fn, sep='\t', header=None,
@@ -77,7 +83,7 @@ def get_trna(row):
 
     genome_id = os.path.splitext(row["Genome"])[0]
     for k in ["bac", "arc"]:
-        out_fn = os.path.join(RTRNA_DIR, "{}.tRNA.{}.out".format(genome_id, k))
+        out_fn = os.path.join(TRNASCAN_DIR, "{}.tRNA.{}.out".format(genome_id, k))
 
         try:
             out_df = pd.read_table(out_fn, sep='\t', header=None,
@@ -97,11 +103,17 @@ def get_trna(row):
     return trna
 
 
-checkm_qa_df = pd.read_table(CHECKM_QA, sep='\t', header=0, engine='python',
+checkm_df = pd.read_table(CHECKM_QA, sep='\t', header=0, engine='python',
     usecols=usecols_checkm)
+checkm_df = checkm_df.set_index("Bin Id")
 
-# genome info
-genome_info_df = checkm_qa_df.rename(columns={"Bin Id": "Genome"})
+gunc_df = pd.read_table(GUNC_OUT, sep='\t', header=0, engine='python',
+    usecols=usecols_gunc)
+gunc_df = gunc_df.set_index("genome")
+
+genome_info_df = pd.concat([checkm_df, gunc_df], axis=1, sort=False)
+genome_info_df['Genome'] = genome_info.index
+genome_info_df = genome_info_df.rename(columns={"pass.GUNC": "GUNC pass"})
 
 genome_info_df[["5S rRNA", "23S rRNA", "16S rRNA"]] = \
     genome_info_df.apply(get_rrna, axis=1)
@@ -109,20 +121,15 @@ genome_info_df[["5S rRNA", "23S rRNA", "16S rRNA"]] = \
 genome_info_df[["# tRNA", "# tRNA types"]] = \
     genome_info_df.apply(get_trna, axis=1)
 
-genome_info_df.to_csv(GENOME_INFO, sep='\t', index=False)
-
-# genome info for dRep
-genome_info_drep_df = genome_info_df[[
+cols_to_order = [
     "Genome",
     "Completeness",
     "Contamination",
-    "Strain heterogeneity"]]
+    "Strain heterogeneity",
+    "GUNC pass"
+    ]
+new_cols = cols_to_order + \
+    genome_info_df.columns.drop(cols_to_order).tolist()
+genome_info_df = genome_info_df[new_cols]
 
-genome_info_drep_df.rename(columns={
-    "Genome": "genome",
-    "Completeness":"completeness",
-    "Contamination": "contamination",
-    "Strain heterogeneity": "strain_heterogeneity"
-    }, inplace=True)
-
-genome_info_drep_df.to_csv(GENOME_INFO_DREP, sep=',', index=False)
+genome_info_df.to_csv(GENOME_INFO, sep='\t', index=False)

@@ -30,7 +30,6 @@ process genome_info {
     """
 }
 
-
 process genome_filter {
     publishDir "${params.outdir}" , mode: 'copy',
         pattern: "{genome_info_filtered.tsv,filtered/*}"
@@ -60,7 +59,6 @@ process genome_filter {
         $gunc_filter
     """
 }
-
 
 process derep_info {
         publishDir "${params.outdir}" , mode: 'copy'

@@ -8,7 +8,7 @@ import pandas as pd
 
 
 CHECKM_QA = sys.argv[1]
-GUNC_OUT = sys.arg[2]
+GUNC_OUT = sys.argv[2]
 BARRNAP_DIR = sys.argv[3]
 TRNASCAN_DIR = sys.argv[4]
 GENOME_INFO = sys.argv[5]

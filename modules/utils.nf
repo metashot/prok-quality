@@ -31,7 +31,8 @@ process genome_info {
 }
 
 process genome_filter {
-    publishDir "${params.outdir}" , mode: 'copy'
+    publishDir "${params.outdir}" , mode: 'copy',
+        pattern: "genome_info_filtered.tsv,filtered"
     
     input:
     path 'genome_info.tsv'

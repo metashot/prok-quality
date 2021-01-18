@@ -4,6 +4,7 @@ import sys
 import os
 import re
 import shutil
+import distutils.util
 
 import pandas as pd
 
@@ -16,7 +17,7 @@ FILTERED_GENOME_INFO_DREP = sys.argv[5]
 FILTERED_GENOMES_DIR = sys.argv[6]
 MIN_COMPLETENESS = float(sys.argv[7])
 MAX_CONTAMINATION = float(sys.argv[8])
-GUNC_FILTER = bool(sys.argv[9])
+GUNC_FILTER = distutils.util.strtobool(sys.argv[9])
 
 
 def filter(row):
@@ -54,6 +55,8 @@ filtered_genome_info_drep_df.rename(columns={
     "Contamination": "contamination",
     "Strain heterogeneity": "strain_heterogeneity"
     }, inplace=True)
+
+filtered_genome_info_drep_df["genome"] + ".fa"
 
 filtered_genome_info_drep_df.to_csv(FILTERED_GENOME_INFO_DREP, sep=',',
     index=False)

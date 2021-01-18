@@ -28,7 +28,8 @@ process gunc {
     mkdir -p genomes_dir
     for genome in $genomes
     do
-        mv \$genome genomes_dir/\${genome}.fa
+        id="\${genome%.*}"
+        mv \$genome genomes_dir/\${id}.fa
     done
 
     gunc run \

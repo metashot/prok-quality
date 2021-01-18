@@ -9,14 +9,16 @@ process checkm {
     
     script:
     reduced_tree = params.reduced_tree ? "--reduced_tree" : ""
-    """   
-    mkdir -p genomes_dir
+    """
     mkdir -p tmp
+
+    mkdir -p genomes_dir
     for genome in $genomes
     do
-        mv \$genome genomes_dir/\${genome}.fa
+        id="\${genome%.*}"
+        mv \$genome genomes_dir/\${id}.fa
     done
-   
+
     checkm lineage_wf \
         --tmpdir tmp \
         -t ${task.cpus} \

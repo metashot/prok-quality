@@ -32,6 +32,6 @@ process gunc {
         --input_dir genomes_dir \
         --db_file ${gunc_db} \
         --threads ${task.cpus} \
-        --file_suffix ${params.ext}
+        --file_suffix .${params.ext}
     """
 }

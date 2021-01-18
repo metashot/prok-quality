@@ -11,22 +11,18 @@ process checkm {
     reduced_tree = params.reduced_tree ? "--reduced_tree" : ""
     """
     mkdir -p tmp
-
     mkdir -p genomes_dir
-    for genome in $genomes
-    do
-        id="\${genome%.*}"
-        mv \$genome genomes_dir/\${id}.fa
-    done
+    mv $genomes genomes_dir
 
     checkm lineage_wf \
         --tmpdir tmp \
         -t ${task.cpus} \
-        -x fa \
+        -x ${params.ext} \
         ${reduced_tree} \
         genomes_dir \
         checkm
-    
+
+    # repeat qa for the extended summary of bin quality
     checkm qa \
         --tmpdir tmp \
         -t ${task.cpus} \

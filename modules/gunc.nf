@@ -26,15 +26,12 @@ process gunc {
     script:
     """
     mkdir -p genomes_dir
-    for genome in $genomes
-    do
-        id="\${genome%.*}"
-        mv \$genome genomes_dir/\${id}.fa
-    done
-
+    mv $genomes genomes_dir
+    
     gunc run \
         --input_dir genomes_dir \
         --db_file ${gunc_db} \
-        --threads ${task.cpus}
+        --threads ${task.cpus} \
+        --file_suffix ${params.ext}
     """
 }

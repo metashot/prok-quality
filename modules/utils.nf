@@ -50,6 +50,7 @@ process genome_filter {
     genome_filter.py \
         genome_info.tsv \
         genomes_dir \
+        ${params.ext} \
         genome_info_filtered.tsv \
         genome_info_filtered_drep.csv \
         filtered \

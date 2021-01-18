@@ -12,7 +12,8 @@ include { genome_info; genome_filter; derep_info } from './modules/utils'
 workflow {
 
     genomes_ch = Channel
-        .fromPath( params.genomes )
+        .fromPath( params.genomes, type:'file')
+        .filter { it.getExtension() == params.ext }
         .map { file -> tuple(file.baseName, file) }
 
     genomes_noid_ch = genomes_ch
@@ -31,10 +32,6 @@ workflow {
             skip: 1,
             storeDir: "${params.outdir}/checkm",
             newLine: true)
-
-    /* rRNAs and tRNAs */
-    barrnap(genomes_ch)
-    trnascan_se(genomes_ch)
 
     /* GUNC */
     gunc_genomes_batch_ch = genomes_noid_ch
@@ -57,6 +54,10 @@ workflow {
             storeDir: "${params.outdir}/gunc",
             newLine: false)
    
+    /* rRNAs and tRNAs */
+    barrnap(genomes_ch)
+    trnascan_se(genomes_ch)
+
     /* Build the genome_info.tsv table */
     genome_info(
         checkm_qa_ch,

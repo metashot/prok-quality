@@ -10,16 +10,18 @@ import pandas as pd
 
 GENOME_INFO = sys.argv[1]
 GENOMES_DIR = sys.argv[2]
-FILTERED_GENOME_INFO = sys.argv[3]
-FILTERED_GENOME_INFO_DREP = sys.argv[4]
-FILTERED_GENOMES_DIR = sys.argv[5]
-MIN_COMPLETENESS = float(sys.argv[6])
-MAX_CONTAMINATION = float(sys.argv[7])
-GUNC_FILTER = bool(sys.argv[8])
+GENOMES_EXT = sys.argv[3]
+FILTERED_GENOME_INFO = sys.argv[4]
+FILTERED_GENOME_INFO_DREP = sys.argv[5]
+FILTERED_GENOMES_DIR = sys.argv[6]
+MIN_COMPLETENESS = float(sys.argv[7])
+MAX_CONTAMINATION = float(sys.argv[8])
+GUNC_FILTER = bool(sys.argv[9])
 
 
 def filter(row):
-    genome_fn = os.path.join(GENOMES_DIR, row["Genome"])
+    genome_fn = os.path.join(GENOMES_DIR,
+        row["Genome"]+".{}".format(GENOMES_EXT))
     shutil.copy(genome_fn, FILTERED_GENOMES_DIR)
 
 try:

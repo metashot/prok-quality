@@ -22,7 +22,7 @@ drep_wdb_df = pd.read_table(DREP_WDB, sep=',', header=0, engine='python') \
 derep_info_df = drep_cdb_df.join(drep_wdb_df, on="genome")
 
 derep_info_df["Representative"] = \
-    np.where(pd.isnull(derep_info_df["cluster"]), "No", "Yes") 
+    np.where(pd.isnull(derep_info_df["cluster"]), "False", "True") 
 
 derep_info_df = derep_info_df[["secondary_cluster", "Representative"]]. \
     reset_index(). \

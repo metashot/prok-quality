@@ -42,21 +42,20 @@ extensive manual review and editing.
 ## Parameters
 Parameters are decladed in [`nextflow.config`](nextflow.config).
 
-### Input and Output
-
-| Parameter | Default | Description |
-| --------- | ------- | ----------- |
-| `genomes` | `"data/*.fa"` | input genomes in FASTA format |
-| `ext` | "fa" | FASTA files extension, file with different extension will be ignored | 
-| `outdir` | `results` | output directory |
-| `gunc_db` | `none` | GUNC database. If 'none' the database will be automatically downloaded and it will be placed in the `gunc_db` directory in the output folder |
-
-### CheckM
-
-| Parameter | Default | Description |
-| --------- | ------- | ----------- |
-| `reduced_tree` | `false` | reduce the memory requirements to approximately 14 GB, set `max_memory` to 16.GB   |
-| `checkm_batch_size` | `1000` | run CheckM on "checkm_batch_size" genomes at once see https://github.com/Ecogenomics/CheckM/issues/118 |
+Input and output:
+- `--genomes` (default `"data/*.fa"`): input genomes in FASTA format
+- `--ext` (defalut `"fa"`): FASTA files extension, files with different
+  extensions will be ignored
+- `--outdir` (default `results`): output directory
+- `--gunc_db` (default `none`): GUNC database. If 'none' the database will be
+  automatically downloaded and will be placed the output folder (`gunc_db`
+  directory)
+ 
+CheckM
+- `--reduced_tree` (default `false`): reduce the memory requirements to
+  approximately 14 GB, set `--max_memory` to `16.GB`
+- `checkm_batch_size` (default `1000`): run CheckM on "checkm_batch_size"
+  genomes at once see https://github.com/Ecogenomics/CheckM/issues/118
 
 ### GUNC
 

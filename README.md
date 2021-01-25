@@ -30,7 +30,8 @@ extensive manual review and editing.
   found) is reported;
 - Dereplication (optional) using [drep](https://github.com/MrOlm/drep).
 
-![Alt text](docs/images/prok-quality.png?raw=true "Schema")
+![Workflow](https://github.com/metashot/prok-quality/blob/gunc/docs/images/prok-qualilty.png
+=500x)
 
 ## Quick start
 

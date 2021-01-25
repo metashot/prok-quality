@@ -42,21 +42,43 @@ extensive manual review and editing.
 ## Parameters
 Parameters are decladed in [`nextflow.config`](nextflow.config).
 
+### Input and Output
+
 | Parameter | Default | Description |
 | --------- | ------- | ----------- |
 | `genomes` | `"data/*.fa"` | input genomes in FASTA format |
 | `ext` | "fa" | FASTA files extension, file with different extension will be ignored | 
 | `outdir` | `results` | output directory |
-| `reduced_tree` | `false` | reduce the memory requirements to approximately 14 GB, set `max_memory` to 16.GB   |
 | `gunc_db` | `none` | GUNC database. If 'none' the database will be automatically downloaded, and it will be placed in the `gunc_db` directory in the output folder |
+
+### CheckM
+
+| Parameter | Default | Description |
+| --------- | ------- | ----------- |
+| `reduced_tree` | `false` | reduce the memory requirements to approximately 14 GB, set `max_memory` to 16.GB   |
+| `checkm_batch_size` | `1000` | run CheckM on "checkm_batch_size" genomes at once see https://github.com/Ecogenomics/CheckM/issues/118 |
+
+### GUNC
+
+| Parameter | Default | Description |
+| --------- | ------- | ----------- |
+| `gunc_batch_size` | `100` | run GUNC on "gunc_batch_size" genomes at once |
+
+### Filtering
+
+| Parameter | Default | Description |
+| --------- | ------- | ----------- |
 | `min_completeness` | `50` | discard sequences with less than 50% completeness |
 | `max_contamination` | `10` | discard sequences with more than 10% contamination |
 | `gunc_filter` | `true` |  if true, discard genomes that do not pass the GUNC filter |
+
+# Dereplication
+
+| Parameter | Default | Description |
+| --------- | ------- | ----------- |
 | `skip_dereplication` | `false` | skip the dereplication step |
 | `ani_thr` | `0.95` | ANI threshold for dereplication (> 0.90) |
 | `min_overlap` | `0.30` |  minimum required overlap in the alignment between genomes to compute ANI |
-| `checkm_batch_size` | `1000` | run CheckM on "checkm_batch_size" genomes at once see https://github.com/Ecogenomics/CheckM/issues/118 |
-| `gunc_batch_size` | `100` | run GUNC on "gunc_batch_size" genomes at once |
 
 ### Resource limits
 

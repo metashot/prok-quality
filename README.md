@@ -64,10 +64,10 @@ Options and default values are decladed in [`nextflow.config`](nextflow.config).
 - `--genomes`: input genomes/bins in FASTA format (default `"data/*.fa"`)
 - `--ext`: FASTA files extension, files with different extensions will be
   ignored (default `"fa"`)
-- `--outdir`: output directory (default `results`)
+- `--outdir`: output directory (default `"results"`)
 - `--gunc_db`: GUNC database. If 'none' the database will be automatically
   downloaded and will be placed the output folder (`gunc_db` directory) (default
-  `none`)
+  `"none"`)
  
 ### CheckM:
 - `--reduced_tree` : reduce the memory requirements to
@@ -115,12 +115,12 @@ directory after the pipeline has finished.
   - GUNC pass: if a genome doesn't pass GUNC analysis it means it is likely to
     be chimeric 
   - Genome size (bp), ... # predicted genes: basic genome statistics (see
-    https://github.com/Ecogenomics/CheckM/wiki/Genome-Quality-Commands#qa);
-  - 5S rRNA, 23S rRNA, 16S rRNA: Yes if the rRNA gene was found;
-  - \# tRNA, \# tRNA types: the number of tRNA and tRNA types found,
+    https://github.com/Ecogenomics/CheckM/wiki/Genome-Quality-Commands#qa)
+  - 5S rRNA, 23S rRNA, 16S rRNA: Yes if the rRNA gene was found
+  - \# tRNA, \# tRNA types: the number of tRNA and tRNA types found
     respectively
 - `filtered`: this folder contains the genomes filtered according to
-  `--min_completeness`, `--max_contamination` and `--gunc_filter` options;
+  `--min_completeness`, `--max_contamination` and `--gunc_filter` options
 - `genome_info_filtered.tsv`: same as `genome_info.tsv`, but only for the
   filtered genomes
 - `derep_info.tsv`: dereplication summary (if `--skip_dereplication=false`)
@@ -182,4 +182,4 @@ https://github.com/Ecogenomics/CheckM/wiki/Installation#system-requirements).
 
 ### Disk
 For each GB of input data the workflow requires approximately 0.5/1 GB for the
-final output and 2 GB for the working directory.
+final output and 2/3 GB for the working directory.

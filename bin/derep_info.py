@@ -13,7 +13,6 @@ GENOME_EXT = sys.argv[3]
 DEREP_INFO = sys.argv[4]
 
 
-
 drep_cdb_df = pd.read_table(DREP_CDB, sep=',', header=0, engine='python') \
     .set_index('genome')
 drep_wdb_df = pd.read_table(DREP_WDB, sep=',', header=0, engine='python') \

@@ -1,8 +1,12 @@
 # prok-quality
 
-metashot/prok-quality is a pipeline for assessing the quality of prokaryotic
-genomes including the prediction of rRNA and tRNA genes (in according to the
-[MISAG and the MIMAG standards](https://doi.org/10.1038/nbt.3893).
+metashot/prok-quality is a comprehensive and easy-to-use pipeline for assessing
+the quality of prokaryotic genomes. metashot/prok-quality reports the quality
+measures recommended by the MIMAG standard (https://doi.org/10.1038/nbt.3893),
+including basic assembly statistics, completeness, contamination, rRNA and tRNA
+genes. Moreover, it relies on GUNC (https://doi.org/10.1101/2020.12.16.422776)
+to detect chimerism. Reproducibility is guaranteed by Nextflow and versioned
+Docker images.
 
 *Note*: This workflow is not intended for classify "finished" SAGs or MAGs.
 The "finished" category is reserved for genomes that can be assembled with
@@ -12,15 +16,16 @@ extensive manual review and editing.
 
 ## Main features
 
-- Input: prokaryotic genomes in FASTA format;
-- Completeness, contamination and strain heterogeneity estimates with
+- Input: "candidate:" genomes in FASTA format;
+- Completeness, contamination and strain heterogeneity estimates using
   [CheckM](https://ecogenomics.github.io/CheckM/);
+- Chimerism, non-redundand contamination detection using GUNC (https://github.com/grp-bork/gunc);
 - 5S, 23S and 16S prediction with [Barrnap](https://github.com/tseemann/barrnap);
 - Transfer RNA (tRNA) prediction with [tRNAscan-SE](http://lowelab.ucsc.edu/tRNAscan-SE/);
-- Filter genomes by their completeness and contamination values;
+- Filter genomes by their completeness, contamination and GUNC prediction;
 - An extended summary of genome quality (including the rRNA and tRNA genes
   found) is reported;
-- Dereplication using [drep](https://github.com/MrOlm/drep).
+- Dereplication (optional) using [drep](https://github.com/MrOlm/drep).
 
 ## Quick start
 
@@ -33,13 +38,30 @@ extensive manual review and editing.
     --genomes '*.fa' \
     --outdir results
   ```
-GUNC_DB=/path/to/gunc_db
-docker run --rm -v${GUNC_DB}:/guncdb -w /guncdb metashot/gunc:1.0.1-1 gunc download_db .
-
 
 ## Parameters
-See the file [`nextflow.config`](nextflow.config) for the complete list of
-parameters.
+Parameters are decladed in [`nextflow.config`](nextflow.config).
+
+| Parameter | Default | Description |
+| --------- | ------- | ----------- |
+| `genomes` | `"data/*.fa"` | input genomes in FASTA format |
+| `ext` | "fa" | FASTA files extension, differen | 
+| `outdir` | `results` | output directory |
+| `busco_db` | `none` | BUSCO download folder for offline mode (see https://busco.ezlab.org/busco_userguide.html#offline) |
+| `lineage` | `auto` | lineage. It can be `auto`, `auto-prok`, `auto-euk`, a dataset name (e.g `bacteria` or `bacteria_odb10`) or a path (e.g. `/home/user/bacteria_odb10`) |
+| `min_completeness` | `50` | discard sequences with less than 50% completeness |
+| `max_contamination` | `10` | discard sequences with more than 10% contamination |
+
+### Resource limits
+
+| Parameter | Default | Description |
+| --------- | ------- | ----------- |
+| `max_cpus` | `8` | maximum number of CPUs for each process |
+| `max_memory` | `32.GB` | maximum memory for each process |
+| `max_time` | `24.h` | maximum time for each process |
+
+See also [System
+requirements](https://metashot.github.io/#system-requirements).
 
 ## Output
 The files and directories listed below will be created in the `results`
@@ -74,6 +96,9 @@ directory after the pipeline has finished.
 - `drep`: original data tables, figures and log of drep.
 
 ## Documetation
+
+GUNC_DB=/path/to/gunc_db
+docker run --rm -v${GUNC_DB}:/guncdb -w /guncdb metashot/gunc:1.0.1-1 gunc download_db .
 
 ### MIMAG/MISAG standards
 Following MIMAG/MISAG standards, you can classify a prokaryotic genome as

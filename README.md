@@ -19,7 +19,7 @@ extensive manual review and editing.
 - Input: "candidate:" genomes in FASTA format;
 - Completeness, contamination and strain heterogeneity estimates using
   [CheckM](https://ecogenomics.github.io/CheckM/);
-- Chimerism, non-redundand contamination detection using GUNC (https://github.com/grp-bork/gunc);
+- Chimerism, non-redundand contamination detection using [GUNC](https://github.com/grp-bork/gunc);
 - 5S, 23S and 16S prediction with [Barrnap](https://github.com/tseemann/barrnap);
 - Transfer RNA (tRNA) prediction with [tRNAscan-SE](http://lowelab.ucsc.edu/tRNAscan-SE/);
 - Filter genomes by their completeness, contamination and GUNC prediction;
@@ -49,7 +49,7 @@ Parameters are decladed in [`nextflow.config`](nextflow.config).
 | `genomes` | `"data/*.fa"` | input genomes in FASTA format |
 | `ext` | "fa" | FASTA files extension, file with different extension will be ignored | 
 | `outdir` | `results` | output directory |
-| `gunc_db` | `none` | GUNC database. If 'none' the database will be automatically downloaded, and it will be placed in the `gunc_db` directory in the output folder |
+| `gunc_db` | `none` | GUNC database. If 'none' the database will be automatically downloaded and it will be placed in the `gunc_db` directory in the output folder |
 
 ### CheckM
 
@@ -72,7 +72,7 @@ Parameters are decladed in [`nextflow.config`](nextflow.config).
 | `max_contamination` | `10` | discard sequences with more than 10% contamination |
 | `gunc_filter` | `true` |  if true, discard genomes that do not pass the GUNC filter |
 
-# Dereplication
+### Dereplication
 
 | Parameter | Default | Description |
 | --------- | ------- | ----------- |

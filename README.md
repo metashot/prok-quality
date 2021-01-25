@@ -32,7 +32,7 @@ extensive manual review and editing.
 
 <img
 src=https://github.com/metashot/prok-quality/blob/gunc/docs/images/prok-qualilty.png
-width="400">
+width="600">
 
 ## Quick start
 

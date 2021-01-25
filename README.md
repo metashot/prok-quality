@@ -45,7 +45,7 @@ Parameters are decladed in [`nextflow.config`](nextflow.config).
 | Parameter | Default | Description |
 | --------- | ------- | ----------- |
 | `genomes` | `"data/*.fa"` | input genomes in FASTA format |
-| `ext` | "fa" | FASTA files extension, differen | 
+| `ext` | "fa" | FASTA files extension, file with different extension will be ignored | 
 | `outdir` | `results` | output directory |
 | `busco_db` | `none` | BUSCO download folder for offline mode (see https://busco.ezlab.org/busco_userguide.html#offline) |
 | `lineage` | `auto` | lineage. It can be `auto`, `auto-prok`, `auto-euk`, a dataset name (e.g `bacteria` or `bacteria_odb10`) or a path (e.g. `/home/user/bacteria_odb10`) |

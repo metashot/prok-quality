@@ -53,10 +53,9 @@ def get_rrna(row):
         data=["No", "No", "No"]
     )
 
-    genome_id = os.path.splitext(row["Genome"])[0]
     for k in ["bac", "arc"]:
 
-        gff_fn = os.path.join(BARRNAP_DIR, "{}.rRNA.{}.gff".format(genome_id, k))
+        gff_fn = os.path.join(BARRNAP_DIR, "{}.rRNA.{}.gff".format(row["Genome"], k))
         
         try:
             gff_df = pd.read_table(gff_fn, sep='\t', header=None,
@@ -81,9 +80,8 @@ def get_trna(row):
         data=[0, 0]
     )
 
-    genome_id = os.path.splitext(row["Genome"])[0]
     for k in ["bac", "arc"]:
-        out_fn = os.path.join(TRNASCAN_DIR, "{}.tRNA.{}.out".format(genome_id, k))
+        out_fn = os.path.join(TRNASCAN_DIR, "{}.tRNA.{}.out".format(row["Genome"], k))
 
         try:
             out_df = pd.read_table(out_fn, sep='\t', header=None,

@@ -5,8 +5,8 @@ the quality of prokaryotic genomes. metashot/prok-quality reports the quality
 measures recommended by the MIMAG standard (https://doi.org/10.1038/nbt.3893),
 including basic assembly statistics, completeness, contamination, rRNA and tRNA
 genes. Moreover, it relies on GUNC (https://doi.org/10.1101/2020.12.16.422776)
-to detect chimerism. Reproducibility is guaranteed by Nextflow and versioned
-Docker images.
+to detect chimerism (i.e. non-redundandt contamination). Reproducibility is
+guaranteed by Nextflow and versioned Docker images.
 
 *Note*: This workflow is not intended for classify "finished" SAGs or MAGs.
 The "finished" category is reserved for genomes that can be assembled with
@@ -16,12 +16,15 @@ extensive manual review and editing.
 
 ## Main features
 
-- Input: "candidate:" genomes in FASTA format;
+- Input: genomes/bins in FASTA format;
 - Completeness, contamination and strain heterogeneity estimates using
   [CheckM](https://ecogenomics.github.io/CheckM/);
-- Chimerism, non-redundand contamination detection using [GUNC](https://github.com/grp-bork/gunc);
-- 5S, 23S and 16S prediction with [Barrnap](https://github.com/tseemann/barrnap);
-- Transfer RNA (tRNA) prediction with [tRNAscan-SE](http://lowelab.ucsc.edu/tRNAscan-SE/);
+- Chimerism, non-redundand contamination detection using
+  [GUNC](https://github.com/grp-bork/gunc);
+- 5S, 23S and 16S prediction with
+  [Barrnap](https://github.com/tseemann/barrnap);
+- Transfer RNA (tRNA) prediction with
+  [tRNAscan-SE](http://lowelab.ucsc.edu/tRNAscan-SE/);
 - Filter genomes by their completeness, contamination and GUNC prediction;
 - An extended summary of genome quality (including the rRNA and tRNA genes
   found) is reported;
@@ -40,52 +43,46 @@ extensive manual review and editing.
   ```
 
 ## Parameters
-Parameters are decladed in [`nextflow.config`](nextflow.config).
+Options and default values are decladed in [`nextflow.config`](nextflow.config).
 
 Input and output:
-- `--genomes` (default `"data/*.fa"`): input genomes in FASTA format
-- `--ext` (defalut `"fa"`): FASTA files extension, files with different
-  extensions will be ignored
-- `--outdir` (default `results`): output directory
-- `--gunc_db` (default `none`): GUNC database. If 'none' the database will be
-  automatically downloaded and will be placed the output folder (`gunc_db`
-  directory)
+- `--genomes`: input genomes/bins in FASTA format (default `"data/*.fa"`)
+- `--ext`: FASTA files extension, files with different extensions will be
+  ignored (default `"fa"`)
+- `--outdir`: output directory (default `results`)
+- `--gunc_db`: GUNC database. If 'none' the database will be automatically
+  downloaded and will be placed the output folder (`gunc_db` directory) (default
+  `none`)
  
-CheckM
-- `--reduced_tree` (default `false`): reduce the memory requirements to
-  approximately 14 GB, set `--max_memory` to `16.GB`
-- `checkm_batch_size` (default `1000`): run CheckM on "checkm_batch_size"
-  genomes at once see https://github.com/Ecogenomics/CheckM/issues/118
+CheckM:
+- `--reduced_tree` : reduce the memory requirements to
+  approximately 14 GB, set `--max_memory` to `16.GB` (default `false`)
+- `--checkm_batch_size`: run CheckM on "checkm_batch_size" genomes at once see
+  https://github.com/Ecogenomics/CheckM/issues/118 (default `1000`)
 
-### GUNC
+GUNC:
+- `--gunc_batch_size`: run GUNC on "gunc_batch_size" genomes at once (default
+`100`)
 
-| Parameter | Default | Description |
-| --------- | ------- | ----------- |
-| `gunc_batch_size` | `100` | run GUNC on "gunc_batch_size" genomes at once |
+Genome filtering
+- `--min_completeness`: discard sequences with less than `min_completeness`%
+  completeness (default `50`)
+- `--max_contamination`: discard sequences with more than
+  `max_contamination`% contamination (default `10`)
+- `--gunc_filter`: if true, discard genomes that do not pass the GUNC filter
+  (default `false`)
 
-### Filtering
+Dereplication
+- `--skip_dereplication`: skip the dereplication step (default
+  `false`)
+- `--ani_thr`: ANI threshold for dereplication (> 0.90) (default `0.95`)
+- `--min_overlap`: minimum required overlap in the alignment between genomes
+  to compute ANI (default `0.30`)
 
-| Parameter | Default | Description |
-| --------- | ------- | ----------- |
-| `min_completeness` | `50` | discard sequences with less than 50% completeness |
-| `max_contamination` | `10` | discard sequences with more than 10% contamination |
-| `gunc_filter` | `true` |  if true, discard genomes that do not pass the GUNC filter |
-
-### Dereplication
-
-| Parameter | Default | Description |
-| --------- | ------- | ----------- |
-| `skip_dereplication` | `false` | skip the dereplication step |
-| `ani_thr` | `0.95` | ANI threshold for dereplication (> 0.90) |
-| `min_overlap` | `0.30` |  minimum required overlap in the alignment between genomes to compute ANI |
-
-### Resource limits
-
-| Parameter | Default | Description |
-| --------- | ------- | ----------- |
-| `max_cpus` | `8` | maximum number of CPUs for each process |
-| `max_memory` | `70.GB` | maximum memory for each process |
-| `max_time` | `96.h` | maximum time for each process |
+Resource limits
+- `--max_cpus`: maximum number of CPUs for each process (default `8`)
+- `--max_memory`: maximum memory for each process (default `70.GB`)
+- `--max_time`: maximum time for each process (default `96.h`)
 
 See also [System
 requirements](https://metashot.github.io/#system-requirements).

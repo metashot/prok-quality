@@ -31,7 +31,7 @@ extensive manual review and editing.
 - Dereplication (optional) using [drep](https://github.com/MrOlm/drep).
 
 <img
-src=https://github.com/metashot/prok-quality/blob/gunc/docs/images/prok-qualilty.png
+src=https://github.com/metashot/prok-quality/blob/master/docs/images/prok-quality.png
 width="600">
 
 ## Quick start

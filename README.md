@@ -30,6 +30,8 @@ extensive manual review and editing.
   found) is reported;
 - Dereplication (optional) using [drep](https://github.com/MrOlm/drep).
 
+.. image:: docs/images/prok-quality.png
+
 ## Quick start
 
 1. Install Docker (or Singulariry) and Nextflow (see
@@ -146,11 +148,13 @@ Following MIMAG/MISAG standards, you can classify a prokaryotic genome as
 - at least 18 tRNA types can be predicted.
 
 A genome can be classified as **medium-quality draft** when its completeness is
-\>=50% and the contamination is <10%. SCG-based tools like CheckM can have very
-low sensitivity towards contamination by fragments from unrelated organisms
-(non-redundant contamination). In order to circumvent this problem, we suggest
-to use the GUNC analysis in addition to the SCG-based estimation of conamination
-(default bahaviour, see `--gunc_filter` option)
+\>=50% and the contamination is <10%.
+
+SCG-based tools like CheckM can have very low sensitivity towards contamination
+by fragments from unrelated organisms (non-redundant contamination). In order to
+circumvent this problem, we suggest to consider the GUNC analysis in addition to
+the SCG-based estimation of contamination (default bahaviour, see
+`--gunc_filter` option)
 
 ### A note on dereplication
 When `--skip_dereplication=false`, filtered genomes will be dereplicated. After

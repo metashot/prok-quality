@@ -47,18 +47,24 @@ Parameters are decladed in [`nextflow.config`](nextflow.config).
 | `genomes` | `"data/*.fa"` | input genomes in FASTA format |
 | `ext` | "fa" | FASTA files extension, file with different extension will be ignored | 
 | `outdir` | `results` | output directory |
-| `busco_db` | `none` | BUSCO download folder for offline mode (see https://busco.ezlab.org/busco_userguide.html#offline) |
-| `lineage` | `auto` | lineage. It can be `auto`, `auto-prok`, `auto-euk`, a dataset name (e.g `bacteria` or `bacteria_odb10`) or a path (e.g. `/home/user/bacteria_odb10`) |
+| `reduced_tree` | `false` | reduce the memory requirements to approximately 14 GB, set `max_memory` to 16.GB   |
+| `gunc_db` | `none` | GUNC database. If 'none' the database will be automatically downloaded, and it will be placed in the `gunc_db` directory in the output folder |
 | `min_completeness` | `50` | discard sequences with less than 50% completeness |
 | `max_contamination` | `10` | discard sequences with more than 10% contamination |
+| `gunc_filter` | `true` |  if true, discard genomes that do not pass the GUNC filter |
+| `skip_dereplication` | `false` | skip the dereplication step |
+| `ani_thr` | `0.95` | ANI threshold for dereplication (> 0.90) |
+| `min_overlap` | `0.30` |  minimum required overlap in the alignment between genomes to compute ANI |
+| `checkm_batch_size` | `1000` | run CheckM on "checkm_batch_size" genomes at once see https://github.com/Ecogenomics/CheckM/issues/118 |
+| `gunc_batch_size` | `100` | run GUNC on "gunc_batch_size" genomes at once |
 
 ### Resource limits
 
 | Parameter | Default | Description |
 | --------- | ------- | ----------- |
 | `max_cpus` | `8` | maximum number of CPUs for each process |
-| `max_memory` | `32.GB` | maximum memory for each process |
-| `max_time` | `24.h` | maximum time for each process |
+| `max_memory` | `70.GB` | maximum memory for each process |
+| `max_time` | `96.h` | maximum time for each process |
 
 See also [System
 requirements](https://metashot.github.io/#system-requirements).

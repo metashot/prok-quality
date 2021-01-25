@@ -6,49 +6,60 @@ process genome_info {
 
     input:
     path('checkm_qa.txt')
+    path('gunc_out.tsv')
     path(barrnap_gffs)
     path(trnascan_se_outs)
    
     output:
     path 'genome_info.tsv', emit: table 
-    path 'genome_info_drep.csv', emit: table_drep
 
     script:
     """
-    mkdir rtrna_dir
-    mv $barrnap_gffs $trnascan_se_outs rtrna_dir
+    mkdir barrnap_gffs_dir
+    mv $barrnap_gffs barrnap_gffs_dir
+
+    mkdir trnascan_se_outs_dir
+    mv $trnascan_se_outs trnascan_se_outs_dir
+
     genome_info.py \
         checkm_qa.txt \
-        rtrna_dir \
-        genome_info.tsv \
-        genome_info_drep.csv
+        gunc_out.tsv \
+        barrnap_gffs_dir \
+        trnascan_se_outs_dir \
+        genome_info.tsv
     """
 }
 
-
 process genome_filter {
-    publishDir "${params.outdir}" , mode: 'copy'
-
+    publishDir "${params.outdir}" , mode: 'copy' ,
+        pattern: "{genome_info_filtered.tsv,filtered/*}"
+    
     input:
     path 'genome_info.tsv'
     path(genomes)
 
     output:
-    path 'filtered/*'
+    path 'genome_info_filtered.tsv', emit: table
+    path 'genome_info_filtered_drep.csv', emit: table_drep
+    path 'filtered/*', emit: genomes
     
-    script:   
+    script:
+    gunc_filter = params.gunc_filter ? "1" : "0"
     """
     mkdir genomes_dir
     mv $genomes genomes_dir
     genome_filter.py \
         genome_info.tsv \
         genomes_dir \
+        ${params.ext} \
+        genome_info_filtered.tsv \
+        genome_info_filtered_drep.csv \
         filtered \
         ${params.min_completeness} \
-        ${params.max_contamination}
+        ${params.max_contamination} \
+        $gunc_filter
     """
 }
-
 
 process derep_info {
         publishDir "${params.outdir}" , mode: 'copy'
@@ -62,6 +73,6 @@ process derep_info {
 
         script:   
         """
-        derep_info.py Cdb.csv Wdb.csv derep_info.tsv
+        derep_info.py Cdb.csv Wdb.csv ${params.ext} derep_info.tsv 
         """
     }

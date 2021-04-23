@@ -57,7 +57,7 @@ filtered_genome_info_drep_df.rename(columns={
     }, inplace=True)
 
 filtered_genome_info_drep_df["genome"] = \
-    filtered_genome_info_drep_df["genome"] + ".fa"
+    filtered_genome_info_drep_df["genome"] + ".{}".format(GENOMES_EXT)
 
 filtered_genome_info_drep_df.to_csv(FILTERED_GENOME_INFO_DREP, sep=',',
     index=False)

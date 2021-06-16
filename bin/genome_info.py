@@ -112,6 +112,7 @@ gunc_df = gunc_df.set_index("genome")
 genome_info_df = pd.concat([checkm_df, gunc_df], axis=1, sort=False)
 genome_info_df['Genome'] = genome_info_df.index
 genome_info_df = genome_info_df.rename(columns={"pass.GUNC": "GUNC pass"})
+genome_info_df["GUNC pass"].fillna(False, inplace=True)
 
 genome_info_df[["5S rRNA", "23S rRNA", "16S rRNA"]] = \
     genome_info_df.apply(get_rrna, axis=1)

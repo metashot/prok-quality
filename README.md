@@ -8,9 +8,15 @@ genes. Moreover, it relies on GUNC (https://doi.org/10.1101/2020.12.16.422776)
 to detect chimerism (i.e. non-redundandt contamination). Reproducibility is
 guaranteed by Nextflow and versioned Docker images.
 
-*Note*: This workflow is not intended for classify "finished" SAGs or MAGs.
+**Note**: This workflow is not intended for classify "finished" SAGs or MAGs.
 The "finished" category is reserved for genomes that can be assembled with
 extensive manual review and editing.
+
+### Please cite
+Albanese D and Donati C. Large-scale quality assessment of prokaryotic genomes
+with metashot/prok-quality [version 1; peer review: awaiting peer review].
+*F1000Research* 2021, **10**:822
+(https://doi.org/10.12688/f1000research.54418.1)
 
 - [MetaShot Home](https://metashot.github.io/)
 

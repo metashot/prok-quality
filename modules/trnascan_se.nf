@@ -14,7 +14,9 @@ process trnascan_se {
 
     script:
     """
-    tRNAscan-SE \
+    mkdir temp
+
+    TMPDIR=temp tRNAscan-SE \
         --nopseudo \
         -B \
         --thread ${task.cpus} \
@@ -22,12 +24,14 @@ process trnascan_se {
         -o ${id}.tRNA.bac.out \
         ${genome}
 
-    tRNAscan-SE \
+    TMPDIR=temp tRNAscan-SE \
         --nopseudo \
         -A \
         --thread ${task.cpus} \
         --fasta ${id}.tRNA.arc.fa \
         -o ${id}.tRNA.arc.out \
         ${genome}
+
+    rm -rf temp
     """
 }

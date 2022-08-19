@@ -14,15 +14,14 @@ extensive manual review and editing.
 
 ### Please cite
 Albanese D and Donati C. Large-scale quality assessment of prokaryotic genomes
-with metashot/prok-quality [version 1; peer review: awaiting peer review].
-*F1000Research* 2021, **10**:822
+with metashot/prok-quality. *F1000Research* 2021, **10**:822
 (https://doi.org/10.12688/f1000research.54418.1)
 
 - [MetaShot Home](https://metashot.github.io/)
 
 ## Main features
 
-- Input: genomes/bins in FASTA format;
+- Input: genomes/metagenomic bins in FASTA format;
 - Completeness, contamination and strain heterogeneity estimates using
   [CheckM](https://ecogenomics.github.io/CheckM/);
 - Chimerism, non-redundand contamination detection using
@@ -40,7 +39,16 @@ with metashot/prok-quality [version 1; peer review: awaiting peer review].
 src=https://github.com/metashot/prok-quality/blob/master/docs/images/prok-quality.png
 width="600">
 
-## Quick start
+Software included:
+
+| Software | Version |
+| -------- | ------- |
+| CheckM | 1.1.2 |
+| GUNC | 1.0.5 |
+| Barrnap | 0.9 |
+| tRNAscan-SE | 2.0.6 |
+| drep | 2.6.2 |
+
 
 1. Install Docker (or Singulariry) and Nextflow (see
    [Dependencies](https://metashot.github.io/#dependencies));
@@ -53,18 +61,18 @@ width="600">
   ```
 
   The GUNC database will be downloaded automatically from the Internet. If you
-  want to download the GUNC database before running the analysis, run the
+  want to download the GUNC database before running the analysis, use the
   following lines:
 
   ```
   GUNC_DB=/path/to/gunc_db
-  docker run --rm -v${GUNC_DB}:/guncdb -w /guncdb metashot/gunc:1.0.1-1 gunc download_db .
+  docker run --rm -v${GUNC_DB}:/guncdb -w /guncdb metashot/gunc:1.0.5-1 gunc download_db .
   ```
 
   Later, run the workflow adding the parameter `--gunc_db $GUNC_DB/gunc_db_name.dmnd`
 
 ## Parameters
-Options and default values are decladed in [`nextflow.config`](nextflow.config).
+Options and default values are declared in [`nextflow.config`](nextflow.config).
 
 ### Input and output
 - `--genomes`: input genomes/bins in FASTA format (default `"data/*.fa"`)

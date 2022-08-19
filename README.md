@@ -49,6 +49,7 @@ Software included:
 | tRNAscan-SE | 2.0.6 |
 | drep | 2.6.2 |
 
+## Quick start
 
 1. Install Docker (or Singulariry) and Nextflow (see
    [Dependencies](https://metashot.github.io/#dependencies));

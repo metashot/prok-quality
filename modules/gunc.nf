@@ -21,7 +21,7 @@ process gunc {
     path(gunc_db)
 
     output:
-    path 'GUNC.maxCSS_level.tsv', emit: maxcss_level
+    path 'GUNC*maxCSS_level.tsv', emit: maxcss_level
 
     script:
     """
